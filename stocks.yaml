@@ -1,0 +1,41 @@
+market_references:
+  - TX      # 台指近月期貨（TAIFEX OpenData，無法連線時自動 fallback 到 ^TWII）
+
+stocks:
+  - AAOI
+  - AMD
+  - ARM
+  - AXTI
+  - COHR
+  - GLW
+  - GOOG
+  - INTC
+  - IBKR
+  - LITE
+  - MRVL
+  - NVDA
+  - 2330.TW
+  - 2327.TW
+  - 3533.TW
+  - 2454.TW
+  - 4977.TW
+
+stock_names:
+  TX: 台指近月
+  AAOI: Applied Optoelectronics
+  AMD: AMD
+  ARM: ARM Holdings
+  AXTI: AXT Inc.
+  COHR: Coherent
+  GLW: Corning
+  GOOG: Google
+  INTC: Intel
+  IBKR: Interactive Brokers
+  LITE: Lumentum
+  MRVL: Marvell
+  NVDA: NVIDIA
+  2330.TW: 台積電
+  2327.TW: 國巨
+  3533.TW: 嘉澤
+  2454.TW: 聯發科
+  4977.TW: 眾達-KY

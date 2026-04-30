@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.env
+
+# 每日產出（日期版本），只保留 latest 與資料檔
+reports/report_*.md
+reports/chip_report_*.md
+reports/trend_data.json
+reports/chip_data.json
+
+# K線圖（由 CI 在 docs/ 中重建，不需要 commit 到主分支）
+charts/

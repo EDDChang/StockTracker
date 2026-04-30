@@ -1,0 +1,61 @@
+name: Daily Stock Report
+
+on:
+  schedule:
+    # 每天 UTC 22:00 = 台灣時間隔日 06:00（週一到週五）
+    - cron: '0 22 * * 1-5'
+  workflow_dispatch:   # 允許在 GitHub UI 手動觸發
+
+permissions:
+  contents: write      # 回寫 history.json / tdcc_cache.json
+  pages: write         # 部署 GitHub Pages
+  id-token: write      # OIDC token for Pages deployment
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt FinMind
+
+      - name: Run trend analysis
+        run: python src/main.py
+
+      - name: Run chip analysis
+        run: python src/chip_screen.py
+        env:
+          FINMIND_USER: ${{ secrets.FINMIND_USER }}
+          FINMIND_PASSWORD: ${{ secrets.FINMIND_PASSWORD }}
+
+      - name: Build web page
+        run: python src/build_web.py
+
+      - name: Commit data files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add reports/history.json reports/tdcc_cache.json
+          git diff --staged --quiet || git commit -m "chore: daily data update [skip ci]"
+          git push
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/
+
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4

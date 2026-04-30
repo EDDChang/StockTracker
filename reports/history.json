@@ -1,0 +1,262 @@
+{
+  "^TWII": [
+    {
+      "date": "2026-04-30",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    }
+  ],
+  "AAOI": [
+    {
+      "date": "2026-04-30",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "warn"
+    },
+    {
+      "date": "2026-05-01",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    }
+  ],
+  "AMD": [
+    {
+      "date": "2026-04-30",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    },
+    {
+      "date": "2026-05-01",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    }
+  ],
+  "ARM": [
+    {
+      "date": "2026-04-30",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    },
+    {
+      "date": "2026-05-01",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    }
+  ],
+  "AXTI": [
+    {
+      "date": "2026-04-30",
+      "struct": "ok",
+      "ma": "warn",
+      "tl": "ok"
+    },
+    {
+      "date": "2026-05-01",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    }
+  ],
+  "COHR": [
+    {
+      "date": "2026-04-30",
+      "struct": "ok",
+      "ma": "warn",
+      "tl": "ok"
+    },
+    {
+      "date": "2026-05-01",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    }
+  ],
+  "GLW": [
+    {
+      "date": "2026-04-30",
+      "struct": "alert",
+      "ma": "warn",
+      "tl": "warn"
+    },
+    {
+      "date": "2026-05-01",
+      "struct": "ok",
+      "ma": "warn",
+      "tl": "warn"
+    }
+  ],
+  "GOOG": [
+    {
+      "date": "2026-04-30",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    },
+    {
+      "date": "2026-05-01",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    }
+  ],
+  "INTC": [
+    {
+      "date": "2026-04-30",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    },
+    {
+      "date": "2026-05-01",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    }
+  ],
+  "IBKR": [
+    {
+      "date": "2026-04-30",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    },
+    {
+      "date": "2026-05-01",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    }
+  ],
+  "LITE": [
+    {
+      "date": "2026-04-30",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    },
+    {
+      "date": "2026-05-01",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    }
+  ],
+  "MRVL": [
+    {
+      "date": "2026-04-30",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "warn"
+    },
+    {
+      "date": "2026-05-01",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    }
+  ],
+  "NVDA": [
+    {
+      "date": "2026-04-30",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    },
+    {
+      "date": "2026-05-01",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    }
+  ],
+  "2330.TW": [
+    {
+      "date": "2026-04-30",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    },
+    {
+      "date": "2026-05-01",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    }
+  ],
+  "2327.TW": [
+    {
+      "date": "2026-04-30",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    },
+    {
+      "date": "2026-05-01",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    }
+  ],
+  "3533.TW": [
+    {
+      "date": "2026-04-30",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    },
+    {
+      "date": "2026-05-01",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    }
+  ],
+  "2454.TW": [
+    {
+      "date": "2026-04-30",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    },
+    {
+      "date": "2026-05-01",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    }
+  ],
+  "4977.TW": [
+    {
+      "date": "2026-04-30",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    },
+    {
+      "date": "2026-05-01",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    }
+  ],
+  "TX": [
+    {
+      "date": "2026-04-30",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    },
+    {
+      "date": "2026-05-01",
+      "struct": "ok",
+      "ma": "ok",
+      "tl": "ok"
+    }
+  ]
+}

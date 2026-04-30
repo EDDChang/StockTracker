@@ -1,0 +1,6 @@
+yfinance
+pandas
+pyyaml
+mplfinance
+requests
+FinMind
