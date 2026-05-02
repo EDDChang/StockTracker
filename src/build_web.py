@@ -60,40 +60,24 @@ def struct_badge(is_broken, streak=0):
 
 
 def ma_badge(ma, streak=0):
-    if ma.get("below_ma_long") and ma.get("ma_long_slope_down"):
+    sev = ma.get("severity", "ok")
+    if sev == "alert":
         s = "🚨" + (f"({streak}天)" if streak >= 2 else "")
         return _badge("bg-danger", s)
-    if ma.get("below_ma_long") or (ma.get("below_ma_short") and ma.get("ma_short_slope_down")):
+    if sev in ("warn", "caution"):
         s = "⚠️" + (f"({streak}天)" if streak >= 2 else "")
         return _badge("bg-warning text-dark", s)
     return _badge("bg-success", "✅")
 
 
-def tl_badge(tl, streak=0):
-    if tl.get("trendline_value") is None:
-        return _badge("bg-secondary", "—")
-    st = tl.get("status", "")
-    if "🚨" in st:
-        return _badge("bg-danger", "🚨" + (f"({streak}天)" if streak >= 2 else ""))
-    if "⚠️" in st:
-        return _badge("bg-warning text-dark", "⚠️" + (f"({streak}天)" if streak >= 2 else ""))
-    return _badge("bg-success", "✅")
-
-
-def overall_badge(is_broken, ma, tl):
-    alerts = sum([
-        bool(is_broken),
-        bool(ma.get("below_ma_long") and ma.get("ma_long_slope_down")),
-        bool("🚨" in tl.get("status", "") and tl.get("trendline_value") is not None),
-    ])
-    warns = sum([
-        bool(ma.get("below_ma_long") or (ma.get("below_ma_short") and ma.get("ma_short_slope_down"))),
-        bool("⚠️" in tl.get("status", "") and tl.get("trendline_value") is not None),
-    ])
-    if alerts >= 2: return _badge("bg-danger",              "多重警示")
-    if alerts == 1: return _badge("bg-orange",              "留意")
-    if warns:       return _badge("bg-warning text-dark",   "觀察")
-    return              _badge("bg-success",              "多頭維持")
+def overall_badge(is_broken, ma):
+    sev = ma.get("severity", "ok")
+    alerts = sum([bool(is_broken), sev == "alert"])
+    warns  = sev in ("warn", "caution")
+    if alerts >= 2: return _badge("bg-danger",            "多重警示")
+    if alerts == 1: return _badge("bg-orange",            "留意")
+    if warns:       return _badge("bg-warning text-dark", "觀察")
+    return              _badge("bg-success",            "多頭維持")
 
 
 def inst_badge(days, thresh=3):
@@ -130,7 +114,7 @@ def overview_row(r, chip_r, names):
     if r.get("error"):
         return (f'<tr class="table-secondary">'
                 f'<td><strong>{ticker}</strong></td><td>{name}</td>'
-                f'<td colspan="9" class="text-danger small">取資料失敗</td></tr>')
+                f'<td colspan="8" class="text-danger small">取資料失敗</td></tr>')
 
     p     = r["price"]
     price = "—" if (p != p) else (f"{p:,.0f}" if p > 1000 else f"{p:.2f}")
@@ -147,10 +131,9 @@ def overview_row(r, chip_r, names):
             f'<td class="text-muted small">{name}</td>'
             f'<td class="text-end fw-semibold">{price}</td>'
             f'<td>{struct_badge(r["is_broken"], sk.get("struct",0))}</td>'
-            f'<td>{ma_badge(r["ma_bd"], sk.get("ma",0))}</td>'
-            f'<td>{tl_badge(r["tl"], sk.get("tl",0))}</td>'
+            f'<td>{ma_badge(r["ma"], sk.get("ma",0))}</td>'
             f'<td>{fi}</td><td>{it}</td><td>{bh}</td><td>{mg}</td>'
-            f'<td>{overall_badge(r["is_broken"], r["ma_bd"], r["tl"])}</td>'
+            f'<td>{overall_badge(r["is_broken"], r["ma"])}</td>'
             f'</tr>')
 
 
@@ -176,21 +159,23 @@ def detail_card(r, chip_r, names):
     else:
         r1 = '<span class="text-warning">⚠️ 尚無足夠波段低點</span>'
 
-    ma   = r["ma_bd"]
-    tl   = r["tl"]
+    ma   = r["ma"]
+    mv   = ma.get("ma_values", {})
     pa   = r.get("pa", {})
     pa_notes = (["⚠️ 長上影線"] if pa.get("long_shadow") else []) + \
                (["⚠️ 空頭吞噬"] if pa.get("engulfing") else [])
     pa_str = "、".join(pa_notes) or "✅ 無明顯轉弱"
-    tl_val = tl.get("trendline_value")
-    tl_extra = f" <small class='text-muted'>（趨勢線: {tl_val:.2f}）</small>" if tl_val else ""
+    ma_vals_str = (f"MA5 {mv.get('5',mv.get(5,'—')):.2f} | "
+                   f"MA10 {mv.get('10',mv.get(10,'—')):.2f} | "
+                   f"MA20 {mv.get('20',mv.get(20,'—')):.2f} | "
+                   f"MA60 {mv.get('60',mv.get(60,'—')):.2f}"
+                   if mv else "")
 
     trend_table = (
         f'<table class="table table-sm table-bordered mb-0">'
         f'<tr><td class="w-25 text-muted">結構</td><td>{r1}</td></tr>'
         f'<tr><td class="text-muted">均線</td><td>{ma["status"]}<br>'
-        f'<small class="text-muted">MA5: {ma["ma_short"]:.2f} | MA20: {ma["ma_long"]:.2f}</small></td></tr>'
-        f'<tr><td class="text-muted">趨勢線</td><td>{tl["status"]}{tl_extra}</td></tr>'
+        f'<small class="text-muted">{ma_vals_str}</small></td></tr>'
         f'<tr><td class="text-muted">K線訊號</td><td>{pa_str}</td></tr>'
         f'</table>'
     )
@@ -227,7 +212,7 @@ def detail_card(r, chip_r, names):
             f'</table></div>'
         )
 
-    header_badge = overall_badge(r["is_broken"], ma, tl)
+    header_badge = overall_badge(r["is_broken"], ma)
     streak_note  = (f' <span class="badge bg-danger ms-1">連續{sk["struct"]}天</span>'
                     if sk.get("struct", 0) >= 2 and r["is_broken"] else "")
 
@@ -274,7 +259,7 @@ def build_html(trend, chip, names):
         n = names.get(t, "")
         rv = r["price"]
         p = "—" if (rv != rv) else (f"{rv:,.0f}" if rv > 1000 else f"{rv:.2f}")
-        ob = overall_badge(r["is_broken"], r["ma_bd"], r["tl"])
+        ob = overall_badge(r["is_broken"], r["ma"])
         ref_parts.append(
             f'<span class="me-4">'
             f'<strong>{t}</strong> <span class="text-muted small">{n}</span>'
@@ -286,9 +271,9 @@ def build_html(trend, chip, names):
     # Overview rows
     rows = []
     if refs:
-        rows.append('<tr class="table-secondary"><td colspan="11" class="fw-bold small py-1">市場指數</td></tr>')
+        rows.append('<tr class="table-secondary"><td colspan="10" class="fw-bold small py-1">市場指數</td></tr>')
         rows += [overview_row(r, get_chip(r["ticker"]), names) for r in refs]
-        rows.append('<tr class="table-secondary"><td colspan="11" class="fw-bold small py-1">個股</td></tr>')
+        rows.append('<tr class="table-secondary"><td colspan="10" class="fw-bold small py-1">個股</td></tr>')
     rows += [overview_row(r, get_chip(r["ticker"]), names) for r in stocks]
 
     # Detail accordion
@@ -346,7 +331,7 @@ def build_html(trend, chip, names):
           <thead class="table-dark">
             <tr>
               <th>代號</th><th>名稱</th><th class="text-end">收盤</th>
-              <th>結構</th><th>均線</th><th>趨勢線</th>
+              <th>結構</th><th>均線</th>
               <th>外資</th><th>投信</th><th>大戶↑</th><th>融資</th>
               <th>綜合</th>
             </tr>

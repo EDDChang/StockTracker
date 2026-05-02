@@ -9,8 +9,7 @@ from analyzer import (
     find_higher_lows,
     check_structure_shift,
     detect_price_action,
-    detect_ma_breakdown,
-    detect_trendline_break,
+    detect_ma_structure,
 )
 
 TODAY = pd.Timestamp.now().strftime("%Y-%m-%d")
@@ -43,47 +42,28 @@ def save_history(history):
         json.dump(history, f, ensure_ascii=False, indent=2)
 
 def extract_signals(result):
-    """將分析結果轉為三個訊號的 ok/warn/alert 狀態。"""
+    """將分析結果轉為訊號的 ok/warn/alert 狀態。"""
     if result.get("error"):
         return None
-    is_broken = result["is_broken"]
-    ma = result["ma_bd"]
-    tl = result["tl"]
-
-    struct_status = "alert" if is_broken else "ok"
-
-    if ma["below_ma_long"] and ma["ma_long_slope_down"]:
-        ma_status = "alert"
-    elif ma["below_ma_long"] or (ma["below_ma_short"] and ma["ma_short_slope_down"]):
-        ma_status = "warn"
-    else:
-        ma_status = "ok"
-
-    if tl["trendline_value"] is None:
-        tl_status = "ok"
-    elif "🚨" in tl["status"]:
-        tl_status = "alert"
-    elif "⚠️" in tl["status"]:
-        tl_status = "warn"
-    else:
-        tl_status = "ok"
-
-    return {"struct": struct_status, "ma": ma_status, "tl": tl_status}
+    struct_status = "alert" if result["is_broken"] else "ok"
+    sev = result["ma"].get("severity", "ok")
+    ma_status = "alert" if sev == "alert" else ("warn" if sev in ("warn", "caution") else "ok")
+    return {"struct": struct_status, "ma": ma_status}
 
 def record_and_get_streaks(history, ticker, signals):
     """儲存今日訊號並回傳各訊號連續天數（包含今天）。"""
     if signals is None:
-        return {"struct": 0, "ma": 0, "tl": 0}
+        return {"struct": 0, "ma": 0}
 
     entries = history.setdefault(ticker, [])
     if entries and entries[-1]["date"] == TODAY:
-        entries[-1] = {"date": TODAY, **signals}   # 同天重跑則覆寫
+        entries[-1] = {"date": TODAY, **signals}
     else:
         entries.append({"date": TODAY, **signals})
-    history[ticker] = entries[-60:]                 # 只保留最近 60 天
+    history[ticker] = entries[-60:]
 
     streaks = {}
-    for key in ("struct", "ma", "tl"):
+    for key in ("struct", "ma"):
         count = 0
         for entry in reversed(entries):
             if entry.get(key, "ok") != "ok":
@@ -99,24 +79,18 @@ def record_and_get_streaks(history, ticker, signals):
 def _struct_icon(is_broken):
     return "🚨" if is_broken else "✅"
 
-def _ma_icon(ma_bd):
-    if ma_bd["below_ma_long"] and ma_bd["ma_long_slope_down"]: return "🚨"
-    if ma_bd["below_ma_long"] or (ma_bd["below_ma_short"] and ma_bd["ma_short_slope_down"]): return "⚠️"
+def _ma_icon(ma):
+    sev = ma.get("severity", "ok")
+    if sev == "alert": return "🚨"
+    if sev in ("warn", "caution"): return "⚠️"
     return "✅"
 
-def _tl_icon(tl):
-    if tl["trendline_value"] is None: return "—"
-    s = tl["status"]
-    if "🚨" in s: return "🚨"
-    if "⚠️" in s: return "⚠️"
-    return "✅"
-
-def _overall(is_broken, ma_bd, tl):
-    icons = [_struct_icon(is_broken), _ma_icon(ma_bd), _tl_icon(tl)]
+def _overall(is_broken, ma):
+    icons = [_struct_icon(is_broken), _ma_icon(ma)]
     reds = icons.count("🚨")
-    if reds >= 2:          return "🚨 多重警示"
-    if reds == 1:          return "⚠️ 留意"
-    if "⚠️" in icons:     return "⚠️ 觀察"
+    if reds >= 2:        return "🚨 多重警示"
+    if reds == 1:        return "⚠️ 留意"
+    if "⚠️" in icons:   return "⚠️ 觀察"
     return "✅ 多頭維持"
 
 def _with_streak(icon, n):
@@ -145,28 +119,28 @@ def build_overview(ref_results, stock_results, names=None):
         "",
         "## 快速總覽",
         "",
-        "| 股票 | 名稱 | 收盤價 | 結構 | 均線 | 趨勢線 | 綜合訊號 |",
-        "|------|------|-------:|:----:|:----:|:------:|--------|",
+        "| 股票 | 名稱 | 收盤價 | 結構 | 均線 | 綜合訊號 |",
+        "|------|------|-------:|:----:|:----:|--------|",
     ]
 
     def row(r):
         ticker = r["ticker"]
         name   = names.get(ticker, "")
         if r.get("error"):
-            return f"| {ticker} | {name} | — | — | — | — | ❌ 錯誤 |"
+            return f"| {ticker} | {name} | — | — | — | ❌ 錯誤 |"
         sk = r["streaks"]
-        s = _with_streak(_struct_icon(r["is_broken"]),  sk["struct"])
-        m = _with_streak(_ma_icon(r["ma_bd"]),           sk["ma"])
-        t = _with_streak(_tl_icon(r["tl"]),              sk["tl"])
-        o = _overall(r["is_broken"], r["ma_bd"], r["tl"])
-        price = f"{r['price']:,.0f}" if r["price"] > 1000 else f"{r['price']:.2f}"
+        s = _with_streak(_struct_icon(r["is_broken"]), sk["struct"])
+        m = _with_streak(_ma_icon(r["ma"]),            sk["ma"])
+        o = _overall(r["is_broken"], r["ma"])
+        p = r["price"]
+        price = f"{p:,.0f}" if p > 1000 else f"{p:.2f}"
         link  = f"[{ticker}](#{_anchor(ticker)})"
-        return f"| {link} | {name} | {price} | {s} | {m} | {t} | {o} |"
+        return f"| {link} | {name} | {price} | {s} | {m} | {o} |"
 
     if ref_results:
-        lines.append("| **市場指數** | | | | | |")
+        lines.append("| **市場指數** | | | | |")
         lines.extend(row(r) for r in ref_results)
-        lines.append("| **個股** | | | | | |")
+        lines.append("| **個股** | | | | |")
     lines.extend(row(r) for r in stock_results)
     lines += ["", "---", ""]
     return "\n".join(lines)
@@ -179,30 +153,17 @@ def generate_chart(ticker, df, hl_list):
     df_c = df[df.index >= cutoff].copy()
     df_c.index = pd.DatetimeIndex(df_c.index)
 
-    ma5   = df_c["Close"].rolling(5).mean()
-    ma20  = df_c["Close"].rolling(20).mean()
-    ema50 = df_c["Close"].ewm(span=50, adjust=False).mean()
+    ma5  = df_c["Close"].rolling(5).mean()
+    ma10 = df_c["Close"].rolling(10).mean()
+    ma20 = df_c["Close"].rolling(20).mean()
+    ma60 = df_c["Close"].rolling(60).mean()
 
     add_plots = [
-        mpf.make_addplot(ma5,   color="#e74c3c", width=1.0, label="MA 5",   linestyle="--"),
-        mpf.make_addplot(ma20,  color="#f5a623", width=1.2, label="MA 20"),
-        mpf.make_addplot(ema50, color="#4a90d9", width=1.2, label="EMA 50"),
+        mpf.make_addplot(ma5,  color="#e74c3c", width=0.9, label="MA5",  linestyle="--"),
+        mpf.make_addplot(ma10, color="#2ecc71", width=1.0, label="MA10"),
+        mpf.make_addplot(ma20, color="#f5a623", width=1.2, label="MA20"),
+        mpf.make_addplot(ma60, color="#4a90d9", width=1.4, label="MA60"),
     ]
-
-    chart_hls = [(d, v) for d, v in hl_list if d >= df_c.index[0]]
-    if len(chart_hls) >= 2:
-        (d0, v0), (d1, v1) = chart_hls[-2], chart_hls[-1]
-        span = (d1 - d0).days
-        if span > 0:
-            slope = (v1 - v0) / span
-            tl_vals = pd.Series(
-                [v0 + slope * (d - d0).days for d in df_c.index],
-                index=df_c.index, dtype=float,
-            )
-            tl_vals[df_c.index < d0] = float("nan")
-            add_plots.append(
-                mpf.make_addplot(tl_vals, color="#2ecc71", width=1.2, label="Trendline", linestyle="--")
-            )
 
     os.makedirs(CHARTS_DIR, exist_ok=True)
     chart_path = os.path.join(CHARTS_DIR, f"{ticker}_chart.png")
@@ -222,7 +183,7 @@ def generate_chart(ticker, df, hl_list):
 # ── per-stock report section ──────────────────────────────────────────────────
 
 def build_report(ticker, current_price, chart_path,
-                 is_broken, last_hl, ma_bd, tl, pa, streaks, name=""):
+                 is_broken, last_hl, ma, pa, streaks, name=""):
 
     sk = streaks
 
@@ -235,15 +196,12 @@ def build_report(ticker, current_price, chart_path,
         r1 = "⚠️ 尚無足夠波段低點判斷結構"
 
     # 規則 2
-    r2 = ma_bd["status"]
+    r2 = ma["status"]
     if sk["ma"] >= 2 and ("🚨" in r2 or "⚠️" in r2):
         r2 += _streak_note(sk["ma"])
 
-    # 規則 3
-    tl_val = f"（趨勢線參考值: {tl['trendline_value']:.2f}）" if tl["trendline_value"] else ""
-    r3 = tl["status"] + tl_val
-    if sk["tl"] >= 2 and ("🚨" in r3 or "⚠️" in r3):
-        r3 += _streak_note(sk["tl"])
+    mv = ma["ma_values"]
+    ma_line = f"MA5: {mv[5]:.2f}　|　MA10: {mv[10]:.2f}　|　MA20: {mv[20]:.2f}　|　MA60: {mv[60]:.2f}"
 
     pa_notes = []
     if pa["long_shadow"]: pa_notes.append("⚠️ 長上影線/墓碑線（多頭受壓）")
@@ -269,12 +227,9 @@ def build_report(ticker, current_price, chart_path,
 ### 規則 1: 價格結構變化 (Price Structure)
 - **狀態**: {r1}
 
-### 規則 2: 短期均線與動能
+### 規則 2: 均線結構 (MA5 / MA10 / MA20 / MA60)
 - **狀態**: {r2}
-- MA 5: {ma_bd['ma_short']:.2f}　|　MA 20: {ma_bd['ma_long']:.2f}
-
-### 規則 3: 上升趨勢線
-- **狀態**: {r3}
+- {ma_line}
 - **K線訊號**: {pa_str}
 
 ---
@@ -287,13 +242,12 @@ def analyse(ticker):
     df = get_stock_data(ticker)
     hl_list = find_higher_lows(df)
     is_broken, last_hl = check_structure_shift(df, hl_list)
-    ma_bd = detect_ma_breakdown(df)
-    tl    = detect_trendline_break(df, hl_list)
+    ma    = detect_ma_structure(df)
     pa    = detect_price_action(df)
     price = float(df["Close"].dropna().iloc[-1])
     chart = generate_chart(ticker, df, hl_list)
     return dict(ticker=ticker, price=price, is_broken=is_broken,
-                last_hl=last_hl, ma_bd=ma_bd, tl=tl, pa=pa, chart=chart)
+                last_hl=last_hl, ma=ma, pa=pa, chart=chart)
 
 
 # ── main ──────────────────────────────────────────────────────────────────────
@@ -309,16 +263,23 @@ def save_trend_data(ref_results, stock_results):
     def _ser(r):
         if r.get("error"):
             return {"ticker": r["ticker"], "error": r["error"]}
+        ma = r["ma"]
         return {
-            "ticker":     r["ticker"],
-            "price":      r["price"],
-            "is_broken":  bool(r["is_broken"]),
-            "last_hl":    r.get("last_hl"),
-            "ma_bd":      r["ma_bd"],
-            "tl":         r["tl"],
-            "pa":         {k: bool(v) for k, v in r["pa"].items()},
-            "streaks":    r["streaks"],
-            "chart":      os.path.basename(r["chart"]) if r.get("chart") else None,
+            "ticker":    r["ticker"],
+            "price":     r["price"],
+            "is_broken": bool(r["is_broken"]),
+            "last_hl":   r.get("last_hl"),
+            "ma": {
+                "status":          ma["status"],
+                "severity":        ma["severity"],
+                "ma_values":       {str(k): v for k, v in ma["ma_values"].items()},
+                "above":           {str(k): bool(v) for k, v in ma["above"].items()},
+                "slope_up":        {str(k): bool(v) for k, v in ma["slope_up"].items()},
+                "aligned_bullish": bool(ma["aligned_bullish"]),
+            },
+            "pa":        {k: bool(v) for k, v in r["pa"].items()},
+            "streaks":   r["streaks"],
+            "chart":     os.path.basename(r["chart"]) if r.get("chart") else None,
         }
     data = {
         "updated": TODAY,
@@ -344,7 +305,7 @@ if __name__ == "__main__":
             section = build_report(
                 r["ticker"], r["price"], r["chart"],
                 r["is_broken"], r["last_hl"],
-                r["ma_bd"], r["tl"], r["pa"],
+                r["ma"], r["pa"],
                 r["streaks"],
                 name=names.get(ticker, ""),
             )
@@ -353,7 +314,7 @@ if __name__ == "__main__":
             print(f"已分析: {ticker}")
         except Exception as e:
             err = dict(ticker=ticker, error=str(e),
-                       streaks={"struct": 0, "ma": 0, "tl": 0})
+                       streaks={"struct": 0, "ma": 0})
             (ref_results if bucket == "ref" else stock_results).append(err)
             sections.append(f"## {ticker}\n\n> 錯誤: {e}\n\n---\n")
             print(f"分析 {ticker} 時發生錯誤: {e}")
