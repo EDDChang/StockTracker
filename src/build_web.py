@@ -1,12 +1,9 @@
 #!/usr/bin/env python3
 """
-build_web.py — 從 trend_data.json + chip_data.json 生成靜態 HTML 儀表板
+build_web.py — 從 trend_data.json 生成靜態 HTML 儀表板
 
 輸出至 docs/index.html（GitHub Pages 部署目錄）。
 K 線圖從 charts/ 複製至 docs/charts/。
-
-使用方式：
-  python src/main.py && python src/chip_screen.py && python src/build_web.py
 """
 
 import os
@@ -29,14 +26,7 @@ def load_names():
 
 def load_data():
     trend_path = os.path.join(REPORT_DIR, "trend_data.json")
-    chip_path  = os.path.join(REPORT_DIR, "chip_data.json")
-    trend = json.load(open(trend_path)) if os.path.exists(trend_path) else {}
-    chip  = json.load(open(chip_path))  if os.path.exists(chip_path)  else {}
-    return trend, chip
-
-
-def chip_index(chip_data):
-    return {r["ticker"]: r for r in chip_data.get("stocks", [])}
+    return json.load(open(trend_path)) if os.path.exists(trend_path) else {}
 
 
 def safe_id(ticker):
@@ -54,24 +44,31 @@ def _muted(text):
 
 def struct_badge(is_broken, streak=0):
     if is_broken:
-        s = f"🚨破壞" + (f"({streak}天)" if streak >= 2 else "")
+        s = "🚨破壞" + (f"({streak}天)" if streak >= 2 else "")
         return _badge("bg-danger", s)
     return _badge("bg-success", "✅")
 
 
-def ma_badge(ma, streak=0):
-    sev = ma.get("severity", "ok")
-    if sev == "alert":
-        s = "🚨" + (f"({streak}天)" if streak >= 2 else "")
-        return _badge("bg-danger", s)
-    if sev in ("warn", "caution"):
-        s = "⚠️" + (f"({streak}天)" if streak >= 2 else "")
-        return _badge("bg-warning text-dark", s)
-    return _badge("bg-success", "✅")
+def ma_badges(ma):
+    """Four mini badges MA5/10/20/60, green=above, yellow=below↑, red=below↓."""
+    above = ma.get("above", {})
+    slope = ma.get("slope_up", {})
+    parts = []
+    for p in ("5", "10", "20", "60"):
+        is_above = above.get(p, True)
+        is_up    = slope.get(p, True)
+        if not is_above and not is_up:
+            cls = "bg-danger"
+        elif not is_above:
+            cls = "bg-warning text-dark"
+        else:
+            cls = "bg-success"
+        parts.append(f'<span class="badge {cls} px-1 me-1" style="font-size:10px">{p}</span>')
+    return "".join(parts)
 
 
 def overall_badge(is_broken, ma):
-    sev = ma.get("severity", "ok")
+    sev    = ma.get("severity", "ok")
     alerts = sum([bool(is_broken), sev == "alert"])
     warns  = sev in ("warn", "caution")
     if alerts >= 2: return _badge("bg-danger",            "多重警示")
@@ -80,33 +77,9 @@ def overall_badge(is_broken, ma):
     return              _badge("bg-success",            "多頭維持")
 
 
-def inst_badge(days, thresh=3):
-    if days >= thresh: return _badge("bg-success",     f"{days}天")
-    if days > 0:       return _muted(f"{days}天")
-    return _muted("—")
-
-
-def bh_badge(rising):
-    return _badge("bg-success", "↑") if rising else _muted("—")
-
-
-def margin_badge(chip_r):
-    if not chip_r or chip_r.get("error"):
-        return _muted("—")
-    mar = chip_r.get("margin", {})
-    chg = mar.get("margin_5d_chg")
-    if mar.get("margin_surge"):
-        return _badge("bg-warning text-dark", f"爆增{chg:+.0%}" if chg is not None else "爆增")
-    if mar.get("chip_settle"):
-        return _badge("bg-success", f"沉澱{chg:+.0%}" if chg is not None else "沉澱")
-    if chg is not None:
-        return _muted(f"{chg:+.0%}")
-    return _muted("—")
-
-
 # ── Overview table row ────────────────────────────────────────────────────────
 
-def overview_row(r, chip_r, names):
+def overview_row(r, names):
     ticker = r["ticker"]
     name   = names.get(ticker, "")
     sid    = safe_id(ticker)
@@ -114,32 +87,25 @@ def overview_row(r, chip_r, names):
     if r.get("error"):
         return (f'<tr class="table-secondary">'
                 f'<td><strong>{ticker}</strong></td><td>{name}</td>'
-                f'<td colspan="8" class="text-danger small">取資料失敗</td></tr>')
+                f'<td colspan="4" class="text-danger small">取資料失敗</td></tr>')
 
     p     = r["price"]
     price = "—" if (p != p) else (f"{p:,.0f}" if p > 1000 else f"{p:.2f}")
     sk    = r.get("streaks", {})
-    chip  = chip_r or {}
-
-    fi = inst_badge(chip.get("inst", {}).get("fi", 0))  if chip and not chip.get("error") else _muted("—")
-    it = inst_badge(chip.get("inst", {}).get("it", 0))  if chip and not chip.get("error") else _muted("—")
-    bh = bh_badge(chip.get("shareholding", {}).get("big_holder_rising", False)) if chip and not chip.get("error") else _muted("—")
-    mg = margin_badge(chip_r)
 
     return (f'<tr>'
             f'<td><a class="ticker-link" onclick="openStock(\'{sid}\')">{ticker}</a></td>'
             f'<td class="text-muted small">{name}</td>'
             f'<td class="text-end fw-semibold">{price}</td>'
-            f'<td>{struct_badge(r["is_broken"], sk.get("struct",0))}</td>'
-            f'<td>{ma_badge(r["ma"], sk.get("ma",0))}</td>'
-            f'<td>{fi}</td><td>{it}</td><td>{bh}</td><td>{mg}</td>'
+            f'<td>{struct_badge(r["is_broken"], sk.get("struct", 0))}</td>'
+            f'<td>{ma_badges(r["ma"])}</td>'
             f'<td>{overall_badge(r["is_broken"], r["ma"])}</td>'
             f'</tr>')
 
 
-# ── Accordion detail card ─────────────────────────────────────────────────────
+# ── 2-column card detail ──────────────────────────────────────────────────────
 
-def detail_card(r, chip_r, names):
+def detail_card(r, names):
     if r.get("error"):
         return ""
     ticker = r["ticker"]
@@ -149,116 +115,104 @@ def detail_card(r, chip_r, names):
     price  = "—" if (p != p) else (f"{p:,.0f}" if p > 1000 else f"{p:.2f}")
     sk     = r.get("streaks", {})
     chart  = r.get("chart", f"{ticker}_chart.png")
+    ma     = r["ma"]
 
-    # Trend text
+    # Structure
     lh = r.get("last_hl")
     if r["is_broken"] and lh:
-        r1 = f'<span class="text-danger">🚨 多頭結構遭破壞（跌破前低 {lh:.2f}）</span>'
+        r1 = f'<span class="text-danger">🚨 破壞（跌破 {lh:.2f}）</span>'
     elif lh:
-        r1 = f'<span class="text-success">✅ 多頭結構完整（最後 HL: {lh:.2f}）</span>'
+        r1 = f'<span class="text-success">✅ 完整（HL: {lh:.2f}）</span>'
     else:
-        r1 = '<span class="text-warning">⚠️ 尚無足夠波段低點</span>'
+        r1 = '<span class="text-warning">⚠️ 不足</span>'
 
-    ma   = r["ma"]
-    mv   = ma.get("ma_values", {})
-    pa   = r.get("pa", {})
+    # MA table rows
+    mv    = ma.get("ma_values", {})
+    above = ma.get("above", {})
+    slope = ma.get("slope_up", {})
+    ma_rows = []
+    for pp in ("5", "10", "20", "60"):
+        val      = mv.get(pp, 0)
+        is_above = above.get(pp, True)
+        is_up    = slope.get(pp, True)
+        if not is_above and not is_up:
+            status = '<span class="text-danger fw-semibold">🚨 下方↓</span>'
+        elif not is_above:
+            status = '<span class="text-warning fw-semibold">⚠️ 下方↑</span>'
+        else:
+            arrow  = "↑" if is_up else "→"
+            status = f'<span class="text-success">✅ 上方{arrow}</span>'
+        ma_rows.append(
+            f'<tr>'
+            f'<td class="text-muted" style="width:46px">MA{pp}</td>'
+            f'<td class="text-end pe-2" style="width:72px">{val:.2f}</td>'
+            f'<td>{status}</td>'
+            f'</tr>'
+        )
+    ma_table = ('<table class="table table-sm mb-0">'
+                + "".join(ma_rows)
+                + '</table>')
+
+    # PA signals
+    pa       = r.get("pa", {})
     pa_notes = (["⚠️ 長上影線"] if pa.get("long_shadow") else []) + \
                (["⚠️ 空頭吞噬"] if pa.get("engulfing") else [])
-    pa_str = "、".join(pa_notes) or "✅ 無明顯轉弱"
-    ma_vals_str = (f"MA5 {mv.get('5',mv.get(5,'—')):.2f} | "
-                   f"MA10 {mv.get('10',mv.get(10,'—')):.2f} | "
-                   f"MA20 {mv.get('20',mv.get(20,'—')):.2f} | "
-                   f"MA60 {mv.get('60',mv.get(60,'—')):.2f}"
-                   if mv else "")
-
-    trend_table = (
-        f'<table class="table table-sm table-bordered mb-0">'
-        f'<tr><td class="w-25 text-muted">結構</td><td>{r1}</td></tr>'
-        f'<tr><td class="text-muted">均線</td><td>{ma["status"]}<br>'
-        f'<small class="text-muted">{ma_vals_str}</small></td></tr>'
-        f'<tr><td class="text-muted">K線訊號</td><td>{pa_str}</td></tr>'
-        f'</table>'
-    )
-
-    # Chip section (TW stocks only)
-    chip_col = ""
-    if chip_r and not chip_r.get("error"):
-        inst = chip_r.get("inst", {})
-        mar  = chip_r.get("margin", {})
-        sh   = chip_r.get("shareholding", {})
-        chg  = mar.get("margin_5d_chg")
-        ratio = sh.get("big_holder_ratio")
-        bh_c  = sh.get("big_holder_chg")
-        tdcc_d = sh.get("report_date", "")
-        chg_str   = f"{chg:+.1%}"   if chg   is not None else "N/A"
-        ratio_str = f"{ratio:.2f}%" if ratio  is not None else "N/A"
-        bh_chg_str = (f"{bh_c:+.2f} pp" if bh_c is not None else
-                      "<small class='text-muted'>首次記錄，下週可比較</small>")
-        chip_col = (
-            f'<div class="col-lg-5">'
-            f'<h6 class="text-primary mb-2">📊 籌碼分析</h6>'
-            f'<table class="table table-sm table-bordered mb-0">'
-            f'<tr><td class="w-40 text-muted">外資連買</td>'
-            f'<td>{inst_badge(inst.get("fi",0))} {inst.get("fi",0)} 天</td></tr>'
-            f'<tr><td class="text-muted">投信連買</td>'
-            f'<td>{inst_badge(inst.get("it",0))} {inst.get("it",0)} 天</td></tr>'
-            f'<tr><td class="text-muted">自營商連買</td>'
-            f'<td>{_muted(str(inst.get("dealer", 0)) + " 天")}</td></tr>'
-            f'<tr><td class="text-muted">大戶持股（400張+）</td>'
-            f'<td>{ratio_str} {bh_badge(sh.get("big_holder_rising",False))} {bh_chg_str}'
-            f'<br><small class="text-muted">集保 {tdcc_d}</small></td></tr>'
-            f'<tr><td class="text-muted">融資5日變化</td>'
-            f'<td>{chg_str} {margin_badge(chip_r)}</td></tr>'
-            f'</table></div>'
-        )
+    pa_str   = "、".join(pa_notes) or "✅ 無明顯轉弱"
 
     header_badge = overall_badge(r["is_broken"], ma)
     streak_note  = (f' <span class="badge bg-danger ms-1">連續{sk["struct"]}天</span>'
                     if sk.get("struct", 0) >= 2 and r["is_broken"] else "")
 
     return (
-        f'<div class="accordion-item" id="s-{sid}">'
-        f'<h2 class="accordion-header">'
-        f'<button class="accordion-button collapsed py-2" type="button"'
-        f' data-bs-toggle="collapse" data-bs-target="#c-{sid}">'
-        f'<span class="fw-bold me-2">{ticker}</span>'
-        f'<span class="text-muted me-2 small">{name}</span>'
-        f'<span class="me-3">{price}</span>'
-        f'{header_badge}{streak_note}'
-        f'</button></h2>'
-        f'<div id="c-{sid}" class="accordion-collapse collapse">'
-        f'<div class="accordion-body pt-2">'
-        f'<img src="charts/{chart}" class="stock-chart rounded mb-3" alt="{ticker} K線圖">'
-        f'<div class="row g-3">'
-        f'<div class="col-lg-7">'
-        f'<h6 class="text-success mb-2">📈 趨勢分析</h6>'
-        f'{trend_table}</div>'
-        f'{chip_col}'
-        f'</div></div></div></div>'
+        f'<div class="col">'
+        f'<div class="card h-100" id="s-{sid}">'
+        # card header — always visible
+        f'<div class="card-header d-flex align-items-center justify-content-between py-2">'
+        f'<div>'
+        f'<a class="ticker-link fw-bold" onclick="openStock(\'{sid}\')">{ticker}</a>'
+        f' <span class="text-muted small ms-1">{name}</span>'
+        f' <span class="fw-semibold ms-2">{price}</span>'
+        f'</div>'
+        f'<div>{header_badge}{streak_note}</div>'
+        f'</div>'
+        # collapsible body
+        f'<div id="c-{sid}" class="collapse">'
+        f'<div class="card-body p-2">'
+        f'<img src="charts/{chart}" class="stock-chart rounded mb-2" alt="{ticker} K線圖">'
+        f'<div class="row g-2 mt-1">'
+        # left: structure + PA
+        f'<div class="col-5">'
+        f'<div class="small fw-semibold text-muted mb-1">結構</div>'
+        f'<div class="small">{r1}</div>'
+        f'<div class="small text-muted mt-2">{pa_str}</div>'
+        f'</div>'
+        # right: MA breakdown table
+        f'<div class="col-7">'
+        f'<div class="small fw-semibold text-muted mb-1">均線</div>'
+        f'{ma_table}'
+        f'</div>'
+        f'</div>'  # row
+        f'</div></div>'  # card-body + collapse
+        f'</div></div>'  # card + col
     )
 
 
 # ── Full HTML ─────────────────────────────────────────────────────────────────
 
-def build_html(trend, chip, names):
-    updated  = trend.get("updated", "—")
-    chip_idx = chip_index(chip)
-
-    def get_chip(ticker):
-        base = ticker.split(".")[0]
-        return chip_idx.get(base)
-
-    refs   = trend.get("refs",   [])
-    stocks = trend.get("stocks", [])
+def build_html(trend, names):
+    updated = trend.get("updated", "—")
+    refs    = trend.get("refs",    [])
+    stocks  = trend.get("stocks",  [])
 
     # Market reference banner
     ref_parts = []
     for r in refs:
-        if r.get("error"): continue
-        t = r["ticker"]
-        n = names.get(t, "")
+        if r.get("error"):
+            continue
+        t  = r["ticker"]
+        n  = names.get(t, "")
         rv = r["price"]
-        p = "—" if (rv != rv) else (f"{rv:,.0f}" if rv > 1000 else f"{rv:.2f}")
+        p  = "—" if (rv != rv) else (f"{rv:,.0f}" if rv > 1000 else f"{rv:.2f}")
         ob = overall_badge(r["is_broken"], r["ma"])
         ref_parts.append(
             f'<span class="me-4">'
@@ -271,16 +225,16 @@ def build_html(trend, chip, names):
     # Overview rows
     rows = []
     if refs:
-        rows.append('<tr class="table-secondary"><td colspan="10" class="fw-bold small py-1">市場指數</td></tr>')
-        rows += [overview_row(r, get_chip(r["ticker"]), names) for r in refs]
-        rows.append('<tr class="table-secondary"><td colspan="10" class="fw-bold small py-1">個股</td></tr>')
-    rows += [overview_row(r, get_chip(r["ticker"]), names) for r in stocks]
+        rows.append('<tr class="table-secondary"><td colspan="6" class="fw-bold small py-1">市場指數</td></tr>')
+        rows += [overview_row(r, names) for r in refs]
+        rows.append('<tr class="table-secondary"><td colspan="6" class="fw-bold small py-1">個股</td></tr>')
+    rows += [overview_row(r, names) for r in stocks]
 
-    # Detail accordion
-    details = [detail_card(r, get_chip(r["ticker"]), names) for r in refs + stocks]
+    # Detail cards (2-col grid)
+    cards = [detail_card(r, names) for r in refs + stocks]
 
-    rows_html    = "\n".join(rows)
-    details_html = "\n".join(details)
+    rows_html  = "\n".join(rows)
+    cards_html = "\n".join(cards)
 
     return f'''<!DOCTYPE html>
 <html lang="zh-TW">
@@ -295,14 +249,13 @@ def build_html(trend, chip, names):
     .top-nav .navbar-brand {{ font-size: 1rem; letter-spacing: .03em; }}
     .market-bar {{ background: #2d2d44; color: #e0e0e0; }}
     .stock-chart {{ max-width: 100%; height: auto; border: 1px solid #dee2e6; }}
-    .accordion-button {{ font-size: 13px; background: #fff; }}
-    .accordion-button:not(.collapsed) {{ background: #eef4ff; box-shadow: none; }}
+    .card-header {{ font-size: 13px; background: #fff; }}
     .ticker-link {{ color: #0d6efd; font-weight: 600; cursor: pointer; text-decoration: none; }}
     .ticker-link:hover {{ text-decoration: underline; }}
     th {{ font-size: 12px; white-space: nowrap; }}
     .badge {{ font-size: 11px; }}
     .bg-orange {{ background-color: #fd7e14 !important; color: #fff; }}
-    .table-sm td, .table-sm th {{ padding: .25rem .4rem; }}
+    .table-sm td, .table-sm th {{ padding: .2rem .35rem; }}
     .section-card {{ background: #fff; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.08); }}
     footer {{ font-size: 11px; }}
   </style>
@@ -324,15 +277,14 @@ def build_html(trend, chip, names):
     <!-- Overview Table -->
     <div class="section-card mb-4">
       <div class="px-3 pt-3 pb-1">
-        <h6 class="text-muted mb-2">快速總覽 <small class="fw-normal">（點擊股票代號展開詳情）</small></h6>
+        <h6 class="text-muted mb-2">快速總覽 <small class="fw-normal">（點擊代號展開詳情）</small></h6>
       </div>
       <div class="table-responsive">
         <table class="table table-sm table-hover align-middle mb-0">
           <thead class="table-dark">
             <tr>
               <th>代號</th><th>名稱</th><th class="text-end">收盤</th>
-              <th>結構</th><th>均線</th>
-              <th>外資</th><th>投信</th><th>大戶↑</th><th>融資</th>
+              <th>結構</th><th>MA5 / 10 / 20 / 60</th>
               <th>綜合</th>
             </tr>
           </thead>
@@ -343,14 +295,14 @@ def build_html(trend, chip, names):
       </div>
     </div>
 
-    <!-- Stock Detail Accordion -->
+    <!-- 2-column stock cards -->
     <h6 class="text-muted mb-2 px-1">個股詳情</h6>
-    <div class="accordion accordion-flush section-card mb-4" id="stocks">
-      {details_html}
+    <div class="row row-cols-1 row-cols-lg-2 g-3 mb-4" id="stocks">
+      {cards_html}
     </div>
 
     <footer class="text-center text-muted mt-2 mb-4">
-      資料來源：Yahoo Finance · TAIFEX · FinMind · TDCC &nbsp;｜&nbsp; 僅供參考，不構成投資建議
+      資料來源：Yahoo Finance · FinMind · TDCC &nbsp;｜&nbsp; 僅供參考，不構成投資建議
     </footer>
   </div>
 
@@ -373,13 +325,13 @@ def build_html(trend, chip, names):
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 def main():
-    trend, chip = load_data()
+    trend = load_data()
     if not trend:
         print("找不到 reports/trend_data.json，請先執行 python src/main.py")
         return
 
     names = load_names()
-    html  = build_html(trend, chip, names)
+    html  = build_html(trend, names)
 
     os.makedirs(DOCS_DIR, exist_ok=True)
     index = os.path.join(DOCS_DIR, "index.html")

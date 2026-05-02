@@ -201,7 +201,22 @@ def build_report(ticker, current_price, chart_path,
         r2 += _streak_note(sk["ma"])
 
     mv = ma["ma_values"]
-    ma_line = f"MA5: {mv[5]:.2f}　|　MA10: {mv[10]:.2f}　|　MA20: {mv[20]:.2f}　|　MA60: {mv[60]:.2f}"
+    ab = ma.get("above", {})
+    sl = ma.get("slope_up", {})
+
+    def _ma_row(p):
+        k = str(p)
+        val      = mv.get(k, 0)
+        is_above = ab.get(k, True)
+        is_up    = sl.get(k, True)
+        pos   = "✅ 上方" if is_above else ("🚨 下方" if not is_up else "⚠️ 下方")
+        slope = "↑" if is_up else "↓"
+        return f"| MA{p} | {val:.2f} | {pos} | {slope} |"
+
+    ma_table = "\n".join([
+        "| 均線 | 數值 | 位置 | 斜率 |",
+        "|------|-----:|:----:|:----:|",
+    ] + [_ma_row(p) for p in (5, 10, 20, 60)])
 
     pa_notes = []
     if pa["long_shadow"]: pa_notes.append("⚠️ 長上影線/墓碑線（多頭受壓）")
@@ -228,8 +243,10 @@ def build_report(ticker, current_price, chart_path,
 - **狀態**: {r1}
 
 ### 規則 2: 均線結構 (MA5 / MA10 / MA20 / MA60)
-- **狀態**: {r2}
-- {ma_line}
+- **綜合**: {r2}
+
+{ma_table}
+
 - **K線訊號**: {pa_str}
 
 ---
@@ -272,9 +289,9 @@ def save_trend_data(ref_results, stock_results):
             "ma": {
                 "status":          ma["status"],
                 "severity":        ma["severity"],
-                "ma_values":       {str(k): v for k, v in ma["ma_values"].items()},
-                "above":           {str(k): bool(v) for k, v in ma["above"].items()},
-                "slope_up":        {str(k): bool(v) for k, v in ma["slope_up"].items()},
+                "ma_values":       ma["ma_values"],
+                "above":           {k: bool(v) for k, v in ma["above"].items()},
+                "slope_up":        {k: bool(v) for k, v in ma["slope_up"].items()},
                 "aligned_bullish": bool(ma["aligned_bullish"]),
             },
             "pa":        {k: bool(v) for k, v in r["pa"].items()},

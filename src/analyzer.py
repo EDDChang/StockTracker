@@ -170,17 +170,18 @@ def detect_ma_structure(df, periods=(5, 10, 20, 60), slope_window=5):
         d[col] = d['Close'].rolling(p).mean()
         val      = float(d[col].iloc[-1])
         prev_val = float(d[col].iloc[-(slope_window + 1)])
-        ma_vals[p]  = round(val, 2)
-        above[p]    = last_close >= val
-        slope_up[p] = val > prev_val
+        k = str(p)
+        ma_vals[k]  = round(val, 2)
+        above[k]    = last_close >= val
+        slope_up[k] = val > prev_val
 
-    below_60 = not above[60]
-    below_20 = not above[20]
-    below_10 = not above[10]
-    below_5  = not above[5]
-    ma60_down = not slope_up[60]
-    ma20_down = not slope_up[20]
-    ma10_down = not slope_up[10]
+    below_60 = not above["60"]
+    below_20 = not above["20"]
+    below_10 = not above["10"]
+    below_5  = not above["5"]
+    ma60_down = not slope_up["60"]
+    ma20_down = not slope_up["20"]
+    ma10_down = not slope_up["10"]
 
     if below_60 or (below_20 and ma20_down):
         severity = "alert"
@@ -193,21 +194,21 @@ def detect_ma_structure(df, periods=(5, 10, 20, 60), slope_window=5):
 
     parts = []
     if below_60 and ma60_down:
-        parts.append(f"🚨 跌破 MA60（{ma_vals[60]:.2f}）且下彎")
+        parts.append(f"🚨 跌破 MA60（{ma_vals['60']:.2f}）且下彎")
     elif below_60:
-        parts.append(f"🚨 跌破 MA60（{ma_vals[60]:.2f}）")
+        parts.append(f"🚨 跌破 MA60（{ma_vals['60']:.2f}）")
     if below_20 and ma20_down:
-        parts.append(f"🚨 跌破 MA20（{ma_vals[20]:.2f}）且下彎")
+        parts.append(f"🚨 跌破 MA20（{ma_vals['20']:.2f}）且下彎")
     elif below_20:
-        parts.append(f"⚠️ 跌破 MA20（{ma_vals[20]:.2f}）")
+        parts.append(f"⚠️ 跌破 MA20（{ma_vals['20']:.2f}）")
     if below_10 and ma10_down and not below_20:
-        parts.append(f"⚠️ 跌破 MA10（{ma_vals[10]:.2f}）且下彎")
+        parts.append(f"⚠️ 跌破 MA10（{ma_vals['10']:.2f}）且下彎")
     elif below_10 and not below_20:
-        parts.append(f"⚠️ 跌破 MA10（{ma_vals[10]:.2f}）")
+        parts.append(f"⚠️ 跌破 MA10（{ma_vals['10']:.2f}）")
     if below_5 and not below_10:
-        parts.append(f"⚠️ 跌破 MA5（{ma_vals[5]:.2f}）")
+        parts.append(f"⚠️ 跌破 MA5（{ma_vals['5']:.2f}）")
 
-    aligned_bullish = (ma_vals[5] > ma_vals[10] > ma_vals[20] > ma_vals[60])
+    aligned_bullish = (ma_vals["5"] > ma_vals["10"] > ma_vals["20"] > ma_vals["60"])
 
     if parts:
         status = " / ".join(parts)
@@ -215,8 +216,8 @@ def detect_ma_structure(df, periods=(5, 10, 20, 60), slope_window=5):
         status = "✅ 多頭排列（MA5 > MA10 > MA20 > MA60）"
     else:
         status = (f"✅ 收盤高於各均線 "
-                  f"MA5 {ma_vals[5]:.2f} | MA10 {ma_vals[10]:.2f} | "
-                  f"MA20 {ma_vals[20]:.2f} | MA60 {ma_vals[60]:.2f}")
+                  f"MA5 {ma_vals['5']:.2f} | MA10 {ma_vals['10']:.2f} | "
+                  f"MA20 {ma_vals['20']:.2f} | MA60 {ma_vals['60']:.2f}")
 
     return {
         "status": status,
