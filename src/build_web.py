@@ -264,7 +264,11 @@ def build_html(trend, names):
   <nav class="navbar top-nav sticky-top py-2">
     <div class="container-fluid">
       <span class="navbar-brand text-white">📈 股票追蹤儀表板</span>
-      <span class="text-secondary small">更新: {updated}</span>
+      <div class="d-flex align-items-center gap-2">
+        <span class="text-secondary small" id="updated-label">更新: {updated}</span>
+        <button id="refresh-btn" class="btn btn-sm btn-outline-light"
+                onclick="triggerRefresh()">🔄 更新資料</button>
+      </div>
     </div>
   </nav>
 
@@ -316,6 +320,53 @@ def build_html(trend, names):
         document.getElementById('s-' + sid)
           .scrollIntoView({{ behavior: 'smooth', block: 'start' }});
       }}, 160);
+    }}
+
+    async function triggerRefresh() {{
+      let token = localStorage.getItem('gh_token');
+      if (!token) {{
+        token = prompt(
+          'GitHub Personal Access Token\\n' +
+          '（需要 workflow 權限，首次輸入後會記住）'
+        );
+        if (!token) return;
+        localStorage.setItem('gh_token', token.trim());
+        token = token.trim();
+      }}
+      const btn = document.getElementById('refresh-btn');
+      btn.disabled = true;
+      btn.textContent = '⏳ 觸發中…';
+      try {{
+        const res = await fetch(
+          'https://api.github.com/repos/EDDChang/StockTracker/actions/workflows/daily.yml/dispatches',
+          {{
+            method: 'POST',
+            headers: {{
+              Authorization: `token ${{token}}`,
+              Accept: 'application/vnd.github.v3+json',
+              'Content-Type': 'application/json',
+            }},
+            body: JSON.stringify({{ ref: 'main' }}),
+          }}
+        );
+        if (res.status === 204) {{
+          btn.textContent = '✅ 已觸發，約 3 分鐘後重整頁面';
+          setTimeout(() => {{ btn.disabled = false; btn.textContent = '🔄 更新資料'; }}, 15000);
+        }} else if (res.status === 401 || res.status === 403) {{
+          localStorage.removeItem('gh_token');
+          btn.disabled = false;
+          btn.textContent = '🔄 更新資料';
+          alert('Token 無效或已過期，請重試。');
+        }} else {{
+          btn.disabled = false;
+          btn.textContent = '🔄 更新資料';
+          alert(`觸發失敗（${{res.status}}）`);
+        }}
+      }} catch (e) {{
+        btn.disabled = false;
+        btn.textContent = '🔄 更新資料';
+        alert('網路錯誤，請確認連線後重試。');
+      }}
     }}
   </script>
 </body>
