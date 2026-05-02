@@ -11,6 +11,9 @@ permissions:
   pages: write         # 部署 GitHub Pages
   id-token: write      # OIDC token for Pages deployment
 
+env:
+  MPLBACKEND: Agg      # headless matplotlib
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -29,13 +32,14 @@ jobs:
           cache: 'pip'
 
       - name: Install dependencies
-        run: pip install -r requirements.txt FinMind
+        run: pip install -r requirements.txt
 
       - name: Run trend analysis
         run: python src/main.py
 
       - name: Run chip analysis
         run: python src/chip_screen.py
+        continue-on-error: true   # 籌碼資料失敗不阻斷部署
         env:
           FINMIND_USER: ${{ secrets.FINMIND_USER }}
           FINMIND_PASSWORD: ${{ secrets.FINMIND_PASSWORD }}

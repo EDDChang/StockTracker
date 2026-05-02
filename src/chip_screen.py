@@ -64,12 +64,22 @@ def get_loader():
     except ImportError:
         print("錯誤：請先安裝 FinMind：  pip install FinMind")
         sys.exit(1)
-    dl = DataLoader()
-    user = os.environ.get("FINMIND_USER")
-    pw   = os.environ.get("FINMIND_PASSWORD")
+    try:
+        dl = DataLoader()
+    except Exception as e:
+        print(f"  [FinMind] DataLoader 初始化失敗（{e}），重試不帶快取...")
+        # 清除可能損壞的快取 token 再重建
+        import importlib, FinMind.data as _fm
+        importlib.reload(_fm)
+        dl = _fm.DataLoader()
+    user = os.environ.get("FINMIND_USER", "").strip()
+    pw   = os.environ.get("FINMIND_PASSWORD", "").strip()
     if user and pw:
-        dl.login(user_id=user, password=pw)
-        print("  [FinMind] 已登入帳號")
+        try:
+            dl.login(user_id=user, password=pw)
+            print("  [FinMind] 已登入帳號")
+        except Exception as e:
+            print(f"  [FinMind] 登入失敗（{e}），改用免費額度")
     else:
         print("  [FinMind] 未登入，使用免費額度（每日 200 次）")
     return dl
