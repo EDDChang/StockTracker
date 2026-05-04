@@ -44,9 +44,6 @@ jobs:
           FINMIND_USER: ${{ secrets.FINMIND_USER }}
           FINMIND_PASSWORD: ${{ secrets.FINMIND_PASSWORD }}
 
-      - name: Build web page
-        run: python src/build_web.py
-
       - name: Commit data files
         run: |
           git config user.name "github-actions[bot]"
