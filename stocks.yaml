@@ -15,10 +15,7 @@ stocks:
   - MRVL
   - NVDA
   - 2330.TW
-  - 2327.TW
-  - 3533.TW
   - 2454.TW
-  - 4977.TW
 
 stock_names:
   TX: 台指近月
@@ -35,7 +32,4 @@ stock_names:
   MRVL: Marvell
   NVDA: NVIDIA
   2330.TW: 台積電
-  2327.TW: 國巨
-  3533.TW: 嘉澤
   2454.TW: 聯發科
-  4977.TW: 眾達-KY
