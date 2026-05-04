@@ -318,3 +318,15 @@ def check_structure_shift(df, hl_list):
     if current_price < last_hl_val:
         return True, last_hl_val
     return False, last_hl_val
+
+
+def days_since_new_high(df):
+    """距上次創新高（最高 High）的交易日數。"""
+    peak_loc  = int(df['High'].values.argmax())
+    last_loc  = len(df) - 1
+    days      = last_loc - peak_loc
+    return {
+        "days":       days,
+        "peak_price": round(float(df['High'].iloc[peak_loc]), 2),
+        "peak_date":  df.index[peak_loc],
+    }

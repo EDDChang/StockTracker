@@ -67,6 +67,18 @@ def ma_badges(ma):
     return "".join(parts)
 
 
+def new_high_badge(nh):
+    """Badge for days since last new high."""
+    if not nh:
+        return _muted("—")
+    days = nh.get("days", 0)
+    if days >= 60:
+        return _badge("bg-danger", f"🚨 {days}天")
+    if days >= 20:
+        return _badge("bg-warning text-dark", f"⚠️ {days}天")
+    return _badge("bg-success", f"✅ {days}天")
+
+
 def overall_badge(is_broken, ma):
     sev    = ma.get("severity", "ok")
     alerts = sum([bool(is_broken), sev == "alert"])
@@ -87,7 +99,7 @@ def overview_row(r, names):
     if r.get("error"):
         return (f'<tr class="table-secondary">'
                 f'<td><strong>{ticker}</strong></td><td>{name}</td>'
-                f'<td colspan="4" class="text-danger small">取資料失敗</td></tr>')
+                f'<td colspan="5" class="text-danger small">取資料失敗</td></tr>')
 
     p     = r["price"]
     price = "—" if (p != p) else (f"{p:,.0f}" if p > 1000 else f"{p:.2f}")
@@ -99,6 +111,7 @@ def overview_row(r, names):
             f'<td class="text-end fw-semibold">{price}</td>'
             f'<td>{struct_badge(r["is_broken"], sk.get("struct", 0))}</td>'
             f'<td>{ma_badges(r["ma"])}</td>'
+            f'<td>{new_high_badge(r.get("new_high"))}</td>'
             f'<td>{overall_badge(r["is_broken"], r["ma"])}</td>'
             f'</tr>')
 
@@ -185,6 +198,10 @@ def detail_card(r, names):
         f'<div class="small fw-semibold text-muted mb-1">結構</div>'
         f'<div class="small">{r1}</div>'
         f'<div class="small text-muted mt-2">{pa_str}</div>'
+        f'<div class="small text-muted mt-2">距新高 {new_high_badge(r.get("new_high"))}'
+        + (f' <span class="text-muted" style="font-size:10px">高點 {r["new_high"]["peak_price"]:,.2f}（{r["new_high"]["peak_date"]}）</span>'
+           if r.get("new_high") else "")
+        + f'</div>'
         f'</div>'
         # right: MA breakdown table
         f'<div class="col-7">'
@@ -225,9 +242,9 @@ def build_html(trend, names):
     # Overview rows
     rows = []
     if refs:
-        rows.append('<tr class="table-secondary"><td colspan="6" class="fw-bold small py-1">市場指數</td></tr>')
+        rows.append('<tr class="table-secondary"><td colspan="7" class="fw-bold small py-1">市場指數</td></tr>')
         rows += [overview_row(r, names) for r in refs]
-        rows.append('<tr class="table-secondary"><td colspan="6" class="fw-bold small py-1">個股</td></tr>')
+        rows.append('<tr class="table-secondary"><td colspan="7" class="fw-bold small py-1">個股</td></tr>')
     rows += [overview_row(r, names) for r in stocks]
 
     # Detail cards (2-col grid)
@@ -289,7 +306,7 @@ def build_html(trend, names):
             <tr>
               <th>代號</th><th>名稱</th><th class="text-end">收盤</th>
               <th>結構</th><th>MA5 / 10 / 20 / 60</th>
-              <th>綜合</th>
+              <th>距新高</th><th>綜合</th>
             </tr>
           </thead>
           <tbody>
