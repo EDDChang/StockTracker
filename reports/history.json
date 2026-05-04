@@ -62,7 +62,7 @@
     {
       "date": "2026-05-04",
       "struct": "ok",
-      "ma": "ok"
+      "ma": "warn"
     }
   ],
   "ARM": [
@@ -149,7 +149,7 @@
     {
       "date": "2026-05-04",
       "struct": "ok",
-      "ma": "ok"
+      "ma": "warn"
     }
   ],
   "GLW": [
