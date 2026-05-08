@@ -1,24 +1,14 @@
 {
-  "^TWII": [
-    {
-      "date": "2026-04-30",
-      "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
-    }
-  ],
   "AAOI": [
     {
       "date": "2026-04-30",
       "struct": "ok",
-      "ma": "ok",
-      "tl": "warn"
+      "ma": "ok"
     },
     {
       "date": "2026-05-01",
       "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
+      "ma": "ok"
     },
     {
       "date": "2026-05-02",
@@ -45,14 +35,12 @@
     {
       "date": "2026-04-30",
       "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
+      "ma": "ok"
     },
     {
       "date": "2026-05-01",
       "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
+      "ma": "ok"
     },
     {
       "date": "2026-05-02",
@@ -79,14 +67,12 @@
     {
       "date": "2026-04-30",
       "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
+      "ma": "ok"
     },
     {
       "date": "2026-05-01",
       "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
+      "ma": "ok"
     },
     {
       "date": "2026-05-02",
@@ -113,14 +99,12 @@
     {
       "date": "2026-04-30",
       "struct": "ok",
-      "ma": "warn",
-      "tl": "ok"
+      "ma": "warn"
     },
     {
       "date": "2026-05-01",
       "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
+      "ma": "ok"
     },
     {
       "date": "2026-05-02",
@@ -147,14 +131,12 @@
     {
       "date": "2026-04-30",
       "struct": "ok",
-      "ma": "warn",
-      "tl": "ok"
+      "ma": "warn"
     },
     {
       "date": "2026-05-01",
       "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
+      "ma": "ok"
     },
     {
       "date": "2026-05-02",
@@ -196,14 +178,12 @@
     {
       "date": "2026-04-30",
       "struct": "alert",
-      "ma": "warn",
-      "tl": "warn"
+      "ma": "warn"
     },
     {
       "date": "2026-05-01",
       "struct": "ok",
-      "ma": "warn",
-      "tl": "warn"
+      "ma": "warn"
     },
     {
       "date": "2026-05-02",
@@ -230,14 +210,12 @@
     {
       "date": "2026-04-30",
       "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
+      "ma": "ok"
     },
     {
       "date": "2026-05-01",
       "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
+      "ma": "ok"
     },
     {
       "date": "2026-05-02",
@@ -264,14 +242,12 @@
     {
       "date": "2026-04-30",
       "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
+      "ma": "ok"
     },
     {
       "date": "2026-05-01",
       "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
+      "ma": "ok"
     },
     {
       "date": "2026-05-02",
@@ -298,14 +274,12 @@
     {
       "date": "2026-04-30",
       "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
+      "ma": "ok"
     },
     {
       "date": "2026-05-01",
       "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
+      "ma": "ok"
     },
     {
       "date": "2026-05-02",
@@ -332,14 +306,12 @@
     {
       "date": "2026-04-30",
       "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
+      "ma": "ok"
     },
     {
       "date": "2026-05-01",
       "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
+      "ma": "ok"
     },
     {
       "date": "2026-05-02",
@@ -366,14 +338,12 @@
     {
       "date": "2026-04-30",
       "struct": "ok",
-      "ma": "ok",
-      "tl": "warn"
+      "ma": "ok"
     },
     {
       "date": "2026-05-01",
       "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
+      "ma": "ok"
     },
     {
       "date": "2026-05-02",
@@ -400,14 +370,12 @@
     {
       "date": "2026-04-30",
       "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
+      "ma": "ok"
     },
     {
       "date": "2026-05-01",
       "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
+      "ma": "ok"
     },
     {
       "date": "2026-05-02",
@@ -439,14 +407,12 @@
     {
       "date": "2026-04-30",
       "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
+      "ma": "ok"
     },
     {
       "date": "2026-05-01",
       "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
+      "ma": "ok"
     },
     {
       "date": "2026-05-02",
@@ -467,78 +433,18 @@
       "date": "2026-05-08",
       "struct": "ok",
       "ma": "ok"
-    }
-  ],
-  "2327.TW": [
-    {
-      "date": "2026-04-30",
-      "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
-    },
-    {
-      "date": "2026-05-01",
-      "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
-    },
-    {
-      "date": "2026-05-02",
-      "struct": "ok",
-      "ma": "ok"
-    },
-    {
-      "date": "2026-05-03",
-      "struct": "ok",
-      "ma": "ok"
-    },
-    {
-      "date": "2026-05-04",
-      "struct": "ok",
-      "ma": "ok"
-    }
-  ],
-  "3533.TW": [
-    {
-      "date": "2026-04-30",
-      "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
-    },
-    {
-      "date": "2026-05-01",
-      "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
-    },
-    {
-      "date": "2026-05-02",
-      "struct": "ok",
-      "ma": "warn"
-    },
-    {
-      "date": "2026-05-03",
-      "struct": "ok",
-      "ma": "warn"
-    },
-    {
-      "date": "2026-05-04",
-      "struct": "ok",
-      "ma": "warn"
     }
   ],
   "2454.TW": [
     {
       "date": "2026-04-30",
       "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
+      "ma": "ok"
     },
     {
       "date": "2026-05-01",
       "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
+      "ma": "ok"
     },
     {
       "date": "2026-05-02",
@@ -557,35 +463,6 @@
     },
     {
       "date": "2026-05-08",
-      "struct": "ok",
-      "ma": "ok"
-    }
-  ],
-  "4977.TW": [
-    {
-      "date": "2026-04-30",
-      "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
-    },
-    {
-      "date": "2026-05-01",
-      "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
-    },
-    {
-      "date": "2026-05-02",
-      "struct": "ok",
-      "ma": "ok"
-    },
-    {
-      "date": "2026-05-03",
-      "struct": "ok",
-      "ma": "ok"
-    },
-    {
-      "date": "2026-05-04",
       "struct": "ok",
       "ma": "ok"
     }
@@ -594,14 +471,12 @@
     {
       "date": "2026-04-30",
       "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
+      "ma": "ok"
     },
     {
       "date": "2026-05-01",
       "struct": "ok",
-      "ma": "ok",
-      "tl": "ok"
+      "ma": "ok"
     },
     {
       "date": "2026-05-02",
