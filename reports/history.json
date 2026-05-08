@@ -92,7 +92,7 @@
     {
       "date": "2026-05-08",
       "struct": "ok",
-      "ma": "warn"
+      "ma": "ok"
     }
   ],
   "AXTI": [
@@ -171,7 +171,7 @@
     {
       "date": "2026-05-08",
       "struct": "ok",
-      "ma": "warn"
+      "ma": "ok"
     }
   ],
   "GLW": [
@@ -519,6 +519,13 @@
       "date": "2026-05-08",
       "struct": "ok",
       "ma": "warn"
+    }
+  ],
+  "DRAM": [
+    {
+      "date": "2026-05-08",
+      "struct": "ok",
+      "ma": "alert"
     }
   ]
 }

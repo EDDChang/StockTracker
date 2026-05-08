@@ -79,12 +79,17 @@ def generate_chart(ticker, df):
     cutoff = pd.Timestamp.now() - pd.DateOffset(days=200)
     df_c   = df[df.index >= cutoff].copy()
     df_c.index = pd.DatetimeIndex(df_c.index)
-    add_plots = [
-        mpf.make_addplot(df_c["Close"].rolling(5).mean(),  color="#e74c3c", width=0.9, label="MA5",  linestyle="--"),
-        mpf.make_addplot(df_c["Close"].rolling(10).mean(), color="#2ecc71", width=1.0, label="MA10"),
-        mpf.make_addplot(df_c["Close"].rolling(20).mean(), color="#f5a623", width=1.2, label="MA20"),
-        mpf.make_addplot(df_c["Close"].rolling(60).mean(), color="#4a90d9", width=1.4, label="MA60"),
+    ma_specs = [
+        (5,  "#e74c3c", 0.9, "MA5",  "--"),
+        (10, "#2ecc71", 1.0, "MA10", "-"),
+        (20, "#f5a623", 1.2, "MA20", "-"),
+        (60, "#4a90d9", 1.4, "MA60", "-"),
     ]
+    add_plots = []
+    for period, color, width, label, ls in ma_specs:
+        s = df_c["Close"].rolling(period).mean()
+        if s.notna().any():
+            add_plots.append(mpf.make_addplot(s, color=color, width=width, label=label, linestyle=ls))
     os.makedirs(CHARTS_DIR, exist_ok=True)
     path = os.path.join(CHARTS_DIR, f"{ticker}_chart.png")
     mpf.plot(df_c, type="candle", style="yahoo",

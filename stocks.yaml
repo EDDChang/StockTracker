@@ -7,6 +7,7 @@ stocks:
   - ARM
   - AXTI
   - COHR
+  - DRAM
   - GLW
   - GOOG
   - INTC
@@ -25,6 +26,7 @@ stock_names:
   ARM: ARM Holdings
   AXTI: AXT Inc.
   COHR: Coherent
+  DRAM: DRAM ETF（美股）
   GLW: Corning
   GOOG: Google
   INTC: Intel
