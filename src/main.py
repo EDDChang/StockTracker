@@ -342,7 +342,7 @@ def build_html(ref_results, stock_results, names):
     async function triggerRefresh() {{
       let token = localStorage.getItem('gh_token');
       if (!token) {{
-        token = prompt('GitHub Personal Access Token\n（需要 workflow 權限，首次輸入後會記住）');
+        token = prompt('GitHub Personal Access Token\\n（需要 workflow 權限，首次輸入後會記住）');
         if (!token) return;
         localStorage.setItem('gh_token', token.trim());
         token = token.trim();
