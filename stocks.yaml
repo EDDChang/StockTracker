@@ -16,6 +16,7 @@ stocks:
   - NVDA
   - 2330.TW
   - 2454.TW
+  - 2337.TW
 
 stock_names:
   TX: 台指近月
@@ -33,3 +34,4 @@ stock_names:
   NVDA: NVIDIA
   2330.TW: 台積電
   2454.TW: 聯發科
+  2337.TW: 旺宏
