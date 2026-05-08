@@ -75,4 +75,5 @@ def get_stock_data(ticker, period="1y"):
         raise ValueError(f"無法獲取 {ticker} 的數據")
     if isinstance(df.columns, pd.MultiIndex):
         df.columns = df.columns.get_level_values(0)
+    df = df.dropna(subset=["Close"])
     return df
