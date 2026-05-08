@@ -206,8 +206,9 @@ def detail_card(r, names):
             st = '<span class="text-warning fw-semibold">⚠️ 下方↑</span>'
         else:
             st = f'<span class="text-success">✅ 上方{"↑" if is_up else "→"}</span>'
+        val_str = f"{val:.2f}" if val is not None else "—"
         ma_rows.append(f'<tr><td class="text-muted" style="width:46px">MA{pp}</td>'
-                       f'<td class="text-end pe-2" style="width:72px">{val:.2f}</td>'
+                       f'<td class="text-end pe-2" style="width:72px">{val_str}</td>'
                        f'<td>{st}</td></tr>')
     ma_table = '<table class="table table-sm mb-0">' + "".join(ma_rows) + '</table>'
 

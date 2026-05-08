@@ -168,12 +168,14 @@ def detect_ma_structure(df, periods=(5, 10, 20, 60), slope_window=5):
     for p in periods:
         col = f"_ma{p}"
         d[col] = d['Close'].rolling(p).mean()
-        val      = float(d[col].iloc[-1])
-        prev_val = float(d[col].iloc[-(slope_window + 1)])
+        series   = d[col].dropna()
+        val      = float(series.iloc[-1])              if not series.empty else float('nan')
+        prev_val = float(series.iloc[-(slope_window)]) if len(series) >= slope_window else val
         k = str(p)
-        ma_vals[k]  = round(val, 2)
-        above[k]    = last_close >= val
-        slope_up[k] = val > prev_val
+        is_nan = val != val  # NaN check
+        ma_vals[k]  = round(val, 2) if not is_nan else None
+        above[k]    = True if is_nan else last_close >= val
+        slope_up[k] = True if is_nan else val > prev_val
 
     below_60 = not above["60"]
     below_20 = not above["20"]
@@ -208,7 +210,10 @@ def detect_ma_structure(df, periods=(5, 10, 20, 60), slope_window=5):
     if below_5 and not below_10:
         parts.append(f"⚠️ 跌破 MA5（{ma_vals['5']:.2f}）")
 
-    aligned_bullish = (ma_vals["5"] > ma_vals["10"] > ma_vals["20"] > ma_vals["60"])
+    vals = [ma_vals[k] for k in ("5", "10", "20", "60")]
+    aligned_bullish = all(v is not None for v in vals) and (vals[0] > vals[1] > vals[2] > vals[3])
+
+    def _fmt(v): return f"{v:.2f}" if v is not None else "—"
 
     if parts:
         status = " / ".join(parts)
@@ -216,8 +221,8 @@ def detect_ma_structure(df, periods=(5, 10, 20, 60), slope_window=5):
         status = "✅ 多頭排列（MA5 > MA10 > MA20 > MA60）"
     else:
         status = (f"✅ 收盤高於各均線 "
-                  f"MA5 {ma_vals['5']:.2f} | MA10 {ma_vals['10']:.2f} | "
-                  f"MA20 {ma_vals['20']:.2f} | MA60 {ma_vals['60']:.2f}")
+                  f"MA5 {_fmt(ma_vals['5'])} | MA10 {_fmt(ma_vals['10'])} | "
+                  f"MA20 {_fmt(ma_vals['20'])} | MA60 {_fmt(ma_vals['60'])}")
 
     return {
         "status": status,
