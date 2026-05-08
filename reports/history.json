@@ -857,5 +857,12 @@
       "struct": "ok",
       "ma": "alert"
     }
+  ],
+  "6155.TW": [
+    {
+      "date": "2026-05-09",
+      "struct": "ok",
+      "ma": "alert"
+    }
   ]
 }
