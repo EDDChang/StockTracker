@@ -4,17 +4,19 @@ market_references:
 stocks:
   - AAOI
   - AMD
-  - ARM
   - AXTI
+  - CDNS
   - COHR
+  - CRWD
   - DRAM
   - GLW
-  - GOOG
-  - INTC
   - IBKR
-  - LITE
-  - MRVL
-  - NVDA
+  - INTC
+  - MU
+  - NET
+  - NOW
+  - SNPS
+  - VPG
   - 2303.TW
   - 2312.TW
   - 2329.TW
@@ -59,17 +61,19 @@ stock_names:
   TX: 台指近月
   AAOI: Applied Optoelectronics
   AMD: AMD
-  ARM: ARM Holdings
   AXTI: AXT Inc.
+  CDNS: Cadence Design Systems
   COHR: Coherent
+  CRWD: CrowdStrike
   DRAM: DRAM ETF（美股）
   GLW: Corning
-  GOOG: Google
-  INTC: Intel
   IBKR: Interactive Brokers
-  LITE: Lumentum
-  MRVL: Marvell
-  NVDA: NVIDIA
+  INTC: Intel
+  MU: Micron Technology
+  NET: Cloudflare
+  NOW: ServiceNow
+  SNPS: Synopsys
+  VPG: Vishay Precision Group
   2303.TW: 聯電
   2312.TW: 金寶
   2329.TW: 華泰
