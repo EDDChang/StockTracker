@@ -284,6 +284,11 @@
       "date": "2026-07-29",
       "struct": "alert",
       "ma": "alert"
+    },
+    {
+      "date": "2026-07-30",
+      "struct": "alert",
+      "ma": "alert"
     }
   ],
   "AMD": [
@@ -569,6 +574,11 @@
     },
     {
       "date": "2026-07-29",
+      "struct": "alert",
+      "ma": "alert"
+    },
+    {
+      "date": "2026-07-30",
       "struct": "alert",
       "ma": "alert"
     }
@@ -935,14 +945,14 @@
       "date": "2026-07-29",
       "struct": "alert",
       "ma": "alert"
+    },
+    {
+      "date": "2026-07-30",
+      "struct": "alert",
+      "ma": "alert"
     }
   ],
   "COHR": [
-    {
-      "date": "2026-05-07",
-      "struct": "ok",
-      "ma": "warn"
-    },
     {
       "date": "2026-05-08",
       "struct": "ok",
@@ -1237,6 +1247,11 @@
       "date": "2026-07-29",
       "struct": "alert",
       "ma": "alert"
+    },
+    {
+      "date": "2026-07-30",
+      "struct": "alert",
+      "ma": "alert"
     }
   ],
   "GLW": [
@@ -1522,6 +1537,11 @@
     },
     {
       "date": "2026-07-29",
+      "struct": "alert",
+      "ma": "alert"
+    },
+    {
+      "date": "2026-07-30",
       "struct": "alert",
       "ma": "alert"
     }
@@ -1898,14 +1918,14 @@
       "date": "2026-07-29",
       "struct": "alert",
       "ma": "alert"
+    },
+    {
+      "date": "2026-07-30",
+      "struct": "alert",
+      "ma": "alert"
     }
   ],
   "IBKR": [
-    {
-      "date": "2026-05-04",
-      "struct": "ok",
-      "ma": "ok"
-    },
     {
       "date": "2026-05-08",
       "struct": "ok",
@@ -2200,6 +2220,11 @@
       "date": "2026-07-29",
       "struct": "alert",
       "ma": "alert"
+    },
+    {
+      "date": "2026-07-30",
+      "struct": "alert",
+      "ma": "warn"
     }
   ],
   "LITE": [
@@ -2748,6 +2773,11 @@
       "date": "2026-07-29",
       "struct": "alert",
       "ma": "alert"
+    },
+    {
+      "date": "2026-07-30",
+      "struct": "alert",
+      "ma": "alert"
     }
   ],
   "2454.TW": [
@@ -3028,6 +3058,11 @@
     },
     {
       "date": "2026-07-29",
+      "struct": "alert",
+      "ma": "alert"
+    },
+    {
+      "date": "2026-07-30",
       "struct": "alert",
       "ma": "alert"
     }
@@ -3327,6 +3362,11 @@
       "date": "2026-07-29",
       "struct": "alert",
       "ma": "alert"
+    },
+    {
+      "date": "2026-07-30",
+      "struct": "alert",
+      "ma": "alert"
     }
   ],
   "2337.TW": [
@@ -3614,6 +3654,11 @@
     },
     {
       "date": "2026-07-29",
+      "struct": "alert",
+      "ma": "alert"
+    },
+    {
+      "date": "2026-07-30",
       "struct": "alert",
       "ma": "alert"
     }
@@ -4684,6 +4729,11 @@
       "date": "2026-07-29",
       "struct": "ok",
       "ma": "alert"
+    },
+    {
+      "date": "2026-07-30",
+      "struct": "ok",
+      "ma": "alert"
     }
   ],
   "CRWD": [
@@ -4921,6 +4971,11 @@
       "date": "2026-07-29",
       "struct": "alert",
       "ma": "warn"
+    },
+    {
+      "date": "2026-07-30",
+      "struct": "alert",
+      "ma": "alert"
     }
   ],
   "MU": [
@@ -5156,6 +5211,11 @@
     },
     {
       "date": "2026-07-29",
+      "struct": "alert",
+      "ma": "alert"
+    },
+    {
+      "date": "2026-07-30",
       "struct": "alert",
       "ma": "alert"
     }
@@ -5395,6 +5455,11 @@
       "date": "2026-07-29",
       "struct": "ok",
       "ma": "ok"
+    },
+    {
+      "date": "2026-07-30",
+      "struct": "ok",
+      "ma": "ok"
     }
   ],
   "NOW": [
@@ -5630,6 +5695,11 @@
     },
     {
       "date": "2026-07-29",
+      "struct": "ok",
+      "ma": "ok"
+    },
+    {
+      "date": "2026-07-30",
       "struct": "ok",
       "ma": "ok"
     }
@@ -5869,6 +5939,11 @@
       "date": "2026-07-29",
       "struct": "ok",
       "ma": "alert"
+    },
+    {
+      "date": "2026-07-30",
+      "struct": "ok",
+      "ma": "alert"
     }
   ],
   "VPG": [
@@ -6106,6 +6181,11 @@
       "date": "2026-07-29",
       "struct": "alert",
       "ma": "alert"
+    },
+    {
+      "date": "2026-07-30",
+      "struct": "alert",
+      "ma": "alert"
     }
   ],
   "2327.TW": [
@@ -6341,6 +6421,11 @@
     },
     {
       "date": "2026-07-29",
+      "struct": "alert",
+      "ma": "alert"
+    },
+    {
+      "date": "2026-07-30",
       "struct": "alert",
       "ma": "alert"
     }
