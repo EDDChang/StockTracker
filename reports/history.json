@@ -979,7 +979,7 @@
     {
       "date": "2026-08-07",
       "struct": "alert",
-      "ma": "alert"
+      "ma": "ok"
     }
   ],
   "COHR": [
@@ -1280,8 +1280,8 @@
     },
     {
       "date": "2026-08-07",
-      "struct": "alert",
-      "ma": "alert"
+      "struct": "ok",
+      "ma": "ok"
     }
   ],
   "GLW": [
@@ -5664,7 +5664,7 @@
     {
       "date": "2026-08-07",
       "struct": "ok",
-      "ma": "warn"
+      "ma": "ok"
     }
   ],
   "NOW": [
