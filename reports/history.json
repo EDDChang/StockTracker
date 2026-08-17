@@ -1,11 +1,6 @@
 {
   "AAOI": [
     {
-      "date": "2026-05-09",
-      "struct": "ok",
-      "ma": "warn"
-    },
-    {
       "date": "2026-05-08",
       "struct": "ok",
       "ma": "warn"
@@ -297,17 +292,17 @@
     },
     {
       "date": "2026-08-14",
+      "struct": "ok",
+      "ma": "ok"
+    },
+    {
+      "date": "2026-08-17",
       "struct": "ok",
       "ma": "ok"
     }
   ],
   "AMD": [
     {
-      "date": "2026-05-09",
-      "struct": "ok",
-      "ma": "ok"
-    },
-    {
       "date": "2026-05-08",
       "struct": "ok",
       "ma": "ok"
@@ -601,6 +596,11 @@
       "date": "2026-08-14",
       "struct": "ok",
       "ma": "ok"
+    },
+    {
+      "date": "2026-08-17",
+      "struct": "ok",
+      "ma": "alert"
     }
   ],
   "ARM": [
@@ -682,11 +682,6 @@
   ],
   "AXTI": [
     {
-      "date": "2026-05-09",
-      "struct": "ok",
-      "ma": "ok"
-    },
-    {
       "date": "2026-05-08",
       "struct": "ok",
       "ma": "ok"
@@ -980,14 +975,14 @@
       "date": "2026-08-14",
       "struct": "ok",
       "ma": "ok"
+    },
+    {
+      "date": "2026-08-17",
+      "struct": "ok",
+      "ma": "ok"
     }
   ],
   "COHR": [
-    {
-      "date": "2026-05-18",
-      "struct": "ok",
-      "ma": "warn"
-    },
     {
       "date": "2026-05-19",
       "struct": "ok",
@@ -1282,14 +1277,14 @@
       "date": "2026-08-14",
       "struct": "ok",
       "ma": "alert"
+    },
+    {
+      "date": "2026-08-17",
+      "struct": "ok",
+      "ma": "ok"
     }
   ],
   "GLW": [
-    {
-      "date": "2026-05-09",
-      "struct": "ok",
-      "ma": "ok"
-    },
     {
       "date": "2026-05-08",
       "struct": "ok",
@@ -1582,6 +1577,11 @@
     },
     {
       "date": "2026-08-14",
+      "struct": "ok",
+      "ma": "alert"
+    },
+    {
+      "date": "2026-08-17",
       "struct": "ok",
       "ma": "alert"
     }
@@ -1675,11 +1675,6 @@
   ],
   "INTC": [
     {
-      "date": "2026-05-09",
-      "struct": "ok",
-      "ma": "ok"
-    },
-    {
       "date": "2026-05-08",
       "struct": "ok",
       "ma": "ok"
@@ -1973,14 +1968,14 @@
       "date": "2026-08-14",
       "struct": "ok",
       "ma": "alert"
+    },
+    {
+      "date": "2026-08-17",
+      "struct": "ok",
+      "ma": "alert"
     }
   ],
   "IBKR": [
-    {
-      "date": "2026-05-18",
-      "struct": "ok",
-      "ma": "warn"
-    },
     {
       "date": "2026-05-19",
       "struct": "ok",
@@ -2273,6 +2268,11 @@
     },
     {
       "date": "2026-08-14",
+      "struct": "ok",
+      "ma": "ok"
+    },
+    {
+      "date": "2026-08-17",
       "struct": "ok",
       "ma": "ok"
     }
@@ -2545,11 +2545,6 @@
   ],
   "2330.TW": [
     {
-      "date": "2026-05-08",
-      "struct": "ok",
-      "ma": "ok"
-    },
-    {
       "date": "2026-05-09",
       "struct": "ok",
       "ma": "ok"
@@ -2843,15 +2838,15 @@
       "date": "2026-08-14",
       "struct": "ok",
       "ma": "ok"
+    },
+    {
+      "date": "2026-08-17",
+      "struct": "ok",
+      "ma": "warn"
     }
   ],
   "2454.TW": [
     {
-      "date": "2026-05-08",
-      "struct": "ok",
-      "ma": "ok"
-    },
-    {
       "date": "2026-05-09",
       "struct": "ok",
       "ma": "ok"
@@ -3145,14 +3140,14 @@
       "date": "2026-08-14",
       "struct": "ok",
       "ma": "ok"
+    },
+    {
+      "date": "2026-08-17",
+      "struct": "ok",
+      "ma": "warn"
     }
   ],
   "TX": [
-    {
-      "date": "2026-05-08",
-      "struct": "ok",
-      "ma": "ok"
-    },
     {
       "date": "2026-05-09",
       "struct": "ok",
@@ -3445,6 +3440,11 @@
     },
     {
       "date": "2026-08-14",
+      "struct": "ok",
+      "ma": "ok"
+    },
+    {
+      "date": "2026-08-17",
       "struct": "ok",
       "ma": "ok"
     }
@@ -3478,11 +3478,6 @@
   ],
   "DRAM": [
     {
-      "date": "2026-05-09",
-      "struct": "ok",
-      "ma": "ok"
-    },
-    {
       "date": "2026-05-08",
       "struct": "ok",
       "ma": "ok"
@@ -3774,6 +3769,11 @@
     },
     {
       "date": "2026-08-14",
+      "struct": "ok",
+      "ma": "alert"
+    },
+    {
+      "date": "2026-08-17",
       "struct": "ok",
       "ma": "alert"
     }
@@ -4899,6 +4899,11 @@
       "date": "2026-08-14",
       "struct": "alert",
       "ma": "alert"
+    },
+    {
+      "date": "2026-08-17",
+      "struct": "alert",
+      "ma": "alert"
     }
   ],
   "CRWD": [
@@ -5189,6 +5194,11 @@
     },
     {
       "date": "2026-08-14",
+      "struct": "ok",
+      "ma": "warn"
+    },
+    {
+      "date": "2026-08-17",
       "struct": "ok",
       "ma": "warn"
     }
@@ -5483,6 +5493,11 @@
       "date": "2026-08-14",
       "struct": "ok",
       "ma": "ok"
+    },
+    {
+      "date": "2026-08-17",
+      "struct": "ok",
+      "ma": "ok"
     }
   ],
   "NET": [
@@ -5775,6 +5790,11 @@
       "date": "2026-08-14",
       "struct": "ok",
       "ma": "ok"
+    },
+    {
+      "date": "2026-08-17",
+      "struct": "ok",
+      "ma": "warn"
     }
   ],
   "NOW": [
@@ -6065,6 +6085,11 @@
     },
     {
       "date": "2026-08-14",
+      "struct": "ok",
+      "ma": "warn"
+    },
+    {
+      "date": "2026-08-17",
       "struct": "ok",
       "ma": "warn"
     }
@@ -6359,6 +6384,11 @@
       "date": "2026-08-14",
       "struct": "ok",
       "ma": "alert"
+    },
+    {
+      "date": "2026-08-17",
+      "struct": "ok",
+      "ma": "alert"
     }
   ],
   "VPG": [
@@ -6651,6 +6681,11 @@
       "date": "2026-08-14",
       "struct": "alert",
       "ma": "alert"
+    },
+    {
+      "date": "2026-08-17",
+      "struct": "alert",
+      "ma": "alert"
     }
   ],
   "2327.TW": [
@@ -6941,6 +6976,11 @@
     },
     {
       "date": "2026-08-14",
+      "struct": "ok",
+      "ma": "alert"
+    },
+    {
+      "date": "2026-08-17",
       "struct": "ok",
       "ma": "alert"
     }
