@@ -599,7 +599,7 @@
     },
     {
       "date": "2026-09-01",
-      "struct": "ok",
+      "struct": "alert",
       "ma": "alert"
     }
   ],
@@ -2274,7 +2274,7 @@
     {
       "date": "2026-09-01",
       "struct": "ok",
-      "ma": "ok"
+      "ma": "alert"
     }
   ],
   "LITE": [
@@ -2842,7 +2842,7 @@
     {
       "date": "2026-09-01",
       "struct": "ok",
-      "ma": "warn"
+      "ma": "ok"
     }
   ],
   "2454.TW": [
@@ -3144,7 +3144,7 @@
     {
       "date": "2026-09-01",
       "struct": "ok",
-      "ma": "alert"
+      "ma": "ok"
     }
   ],
   "TX": [
@@ -4907,7 +4907,7 @@
     },
     {
       "date": "2026-09-01",
-      "struct": "ok",
+      "struct": "alert",
       "ma": "alert"
     }
   ],
@@ -5210,7 +5210,7 @@
     {
       "date": "2026-09-01",
       "struct": "ok",
-      "ma": "ok"
+      "ma": "warn"
     }
   ],
   "MU": [
@@ -5512,7 +5512,7 @@
     {
       "date": "2026-09-01",
       "struct": "ok",
-      "ma": "ok"
+      "ma": "alert"
     }
   ],
   "NET": [
@@ -5814,7 +5814,7 @@
     {
       "date": "2026-09-01",
       "struct": "ok",
-      "ma": "ok"
+      "ma": "warn"
     }
   ],
   "NOW": [
@@ -6418,7 +6418,7 @@
     {
       "date": "2026-09-01",
       "struct": "ok",
-      "ma": "ok"
+      "ma": "alert"
     }
   ],
   "VPG": [
@@ -7021,7 +7021,7 @@
     },
     {
       "date": "2026-09-01",
-      "struct": "alert",
+      "struct": "ok",
       "ma": "alert"
     }
   ]
