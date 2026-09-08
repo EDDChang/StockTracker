@@ -600,7 +600,7 @@
     {
       "date": "2026-09-08",
       "struct": "ok",
-      "ma": "alert"
+      "ma": "ok"
     }
   ],
   "ARM": [
@@ -1582,7 +1582,7 @@
     },
     {
       "date": "2026-09-08",
-      "struct": "alert",
+      "struct": "ok",
       "ma": "alert"
     }
   ],
@@ -2274,7 +2274,7 @@
     {
       "date": "2026-09-08",
       "struct": "ok",
-      "ma": "warn"
+      "ma": "alert"
     }
   ],
   "LITE": [
@@ -6115,7 +6115,7 @@
     },
     {
       "date": "2026-09-08",
-      "struct": "ok",
+      "struct": "alert",
       "ma": "warn"
     }
   ],
