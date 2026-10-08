@@ -1,11 +1,6 @@
 {
   "AAOI": [
     {
-      "date": "2026-07-10",
-      "struct": "alert",
-      "ma": "alert"
-    },
-    {
       "date": "2026-07-13",
       "struct": "alert",
       "ma": "alert"
@@ -297,17 +292,17 @@
     },
     {
       "date": "2026-10-07",
+      "struct": "alert",
+      "ma": "ok"
+    },
+    {
+      "date": "2026-10-08",
       "struct": "alert",
       "ma": "ok"
     }
   ],
   "AMD": [
     {
-      "date": "2026-07-10",
-      "struct": "ok",
-      "ma": "ok"
-    },
-    {
       "date": "2026-07-13",
       "struct": "ok",
       "ma": "warn"
@@ -599,6 +594,11 @@
     },
     {
       "date": "2026-10-07",
+      "struct": "ok",
+      "ma": "ok"
+    },
+    {
+      "date": "2026-10-08",
       "struct": "ok",
       "ma": "ok"
     }
@@ -682,11 +682,6 @@
   ],
   "AXTI": [
     {
-      "date": "2026-07-10",
-      "struct": "alert",
-      "ma": "alert"
-    },
-    {
       "date": "2026-07-13",
       "struct": "alert",
       "ma": "alert"
@@ -980,15 +975,15 @@
       "date": "2026-10-07",
       "struct": "ok",
       "ma": "ok"
+    },
+    {
+      "date": "2026-10-08",
+      "struct": "ok",
+      "ma": "warn"
     }
   ],
   "COHR": [
     {
-      "date": "2026-07-10",
-      "struct": "alert",
-      "ma": "alert"
-    },
-    {
       "date": "2026-07-13",
       "struct": "alert",
       "ma": "alert"
@@ -1280,17 +1275,17 @@
     },
     {
       "date": "2026-10-07",
+      "struct": "ok",
+      "ma": "ok"
+    },
+    {
+      "date": "2026-10-08",
       "struct": "ok",
       "ma": "ok"
     }
   ],
   "GLW": [
     {
-      "date": "2026-07-10",
-      "struct": "ok",
-      "ma": "warn"
-    },
-    {
       "date": "2026-07-13",
       "struct": "ok",
       "ma": "alert"
@@ -1582,6 +1577,11 @@
     },
     {
       "date": "2026-10-07",
+      "struct": "ok",
+      "ma": "ok"
+    },
+    {
+      "date": "2026-10-08",
       "struct": "ok",
       "ma": "ok"
     }
@@ -1675,11 +1675,6 @@
   ],
   "INTC": [
     {
-      "date": "2026-07-10",
-      "struct": "alert",
-      "ma": "warn"
-    },
-    {
       "date": "2026-07-13",
       "struct": "alert",
       "ma": "alert"
@@ -1971,17 +1966,17 @@
     },
     {
       "date": "2026-10-07",
+      "struct": "alert",
+      "ma": "warn"
+    },
+    {
+      "date": "2026-10-08",
       "struct": "alert",
       "ma": "warn"
     }
   ],
   "IBKR": [
     {
-      "date": "2026-07-10",
-      "struct": "ok",
-      "ma": "warn"
-    },
-    {
       "date": "2026-07-13",
       "struct": "ok",
       "ma": "warn"
@@ -2274,6 +2269,11 @@
     {
       "date": "2026-10-07",
       "struct": "ok",
+      "ma": "alert"
+    },
+    {
+      "date": "2026-10-08",
+      "struct": "alert",
       "ma": "alert"
     }
   ],
@@ -2545,11 +2545,6 @@
   ],
   "2330.TW": [
     {
-      "date": "2026-07-10",
-      "struct": "ok",
-      "ma": "warn"
-    },
-    {
       "date": "2026-07-13",
       "struct": "ok",
       "ma": "ok"
@@ -2843,15 +2838,15 @@
       "date": "2026-10-07",
       "struct": "ok",
       "ma": "ok"
+    },
+    {
+      "date": "2026-10-08",
+      "struct": "ok",
+      "ma": "warn"
     }
   ],
   "2454.TW": [
     {
-      "date": "2026-07-10",
-      "struct": "alert",
-      "ma": "alert"
-    },
-    {
       "date": "2026-07-13",
       "struct": "alert",
       "ma": "alert"
@@ -3143,17 +3138,17 @@
     },
     {
       "date": "2026-10-07",
+      "struct": "alert",
+      "ma": "warn"
+    },
+    {
+      "date": "2026-10-08",
       "struct": "alert",
       "ma": "warn"
     }
   ],
   "TX": [
     {
-      "date": "2026-07-10",
-      "struct": "ok",
-      "ma": "warn"
-    },
-    {
       "date": "2026-07-13",
       "struct": "ok",
       "ma": "warn"
@@ -3447,6 +3442,11 @@
       "date": "2026-10-07",
       "struct": "ok",
       "ma": "ok"
+    },
+    {
+      "date": "2026-10-08",
+      "struct": "ok",
+      "ma": "warn"
     }
   ],
   "2337.TW": [
@@ -3478,11 +3478,6 @@
   ],
   "DRAM": [
     {
-      "date": "2026-07-10",
-      "struct": "alert",
-      "ma": "warn"
-    },
-    {
       "date": "2026-07-13",
       "struct": "alert",
       "ma": "warn"
@@ -3776,6 +3771,11 @@
       "date": "2026-10-07",
       "struct": "ok",
       "ma": "ok"
+    },
+    {
+      "date": "2026-10-08",
+      "struct": "ok",
+      "ma": "warn"
     }
   ],
   "2303.TW": [
@@ -4611,11 +4611,6 @@
   ],
   "CDNS": [
     {
-      "date": "2026-07-10",
-      "struct": "ok",
-      "ma": "ok"
-    },
-    {
       "date": "2026-07-13",
       "struct": "ok",
       "ma": "alert"
@@ -4907,17 +4902,17 @@
     },
     {
       "date": "2026-10-07",
+      "struct": "ok",
+      "ma": "ok"
+    },
+    {
+      "date": "2026-10-08",
       "struct": "ok",
       "ma": "ok"
     }
   ],
   "CRWD": [
     {
-      "date": "2026-07-10",
-      "struct": "ok",
-      "ma": "warn"
-    },
-    {
       "date": "2026-07-13",
       "struct": "ok",
       "ma": "warn"
@@ -5211,15 +5206,15 @@
       "date": "2026-10-07",
       "struct": "ok",
       "ma": "ok"
+    },
+    {
+      "date": "2026-10-08",
+      "struct": "ok",
+      "ma": "warn"
     }
   ],
   "MU": [
     {
-      "date": "2026-07-10",
-      "struct": "alert",
-      "ma": "warn"
-    },
-    {
       "date": "2026-07-13",
       "struct": "alert",
       "ma": "warn"
@@ -5513,15 +5508,15 @@
       "date": "2026-10-07",
       "struct": "ok",
       "ma": "warn"
+    },
+    {
+      "date": "2026-10-08",
+      "struct": "ok",
+      "ma": "ok"
     }
   ],
   "NET": [
     {
-      "date": "2026-07-10",
-      "struct": "ok",
-      "ma": "ok"
-    },
-    {
       "date": "2026-07-13",
       "struct": "ok",
       "ma": "warn"
@@ -5815,15 +5810,15 @@
       "date": "2026-10-07",
       "struct": "ok",
       "ma": "ok"
+    },
+    {
+      "date": "2026-10-08",
+      "struct": "ok",
+      "ma": "warn"
     }
   ],
   "NOW": [
     {
-      "date": "2026-07-10",
-      "struct": "ok",
-      "ma": "warn"
-    },
-    {
       "date": "2026-07-13",
       "struct": "ok",
       "ma": "ok"
@@ -6115,17 +6110,17 @@
     },
     {
       "date": "2026-10-07",
+      "struct": "ok",
+      "ma": "ok"
+    },
+    {
+      "date": "2026-10-08",
       "struct": "ok",
       "ma": "ok"
     }
   ],
   "SNPS": [
     {
-      "date": "2026-07-10",
-      "struct": "alert",
-      "ma": "alert"
-    },
-    {
       "date": "2026-07-13",
       "struct": "alert",
       "ma": "alert"
@@ -6417,17 +6412,17 @@
     },
     {
       "date": "2026-10-07",
+      "struct": "ok",
+      "ma": "ok"
+    },
+    {
+      "date": "2026-10-08",
       "struct": "ok",
       "ma": "ok"
     }
   ],
   "VPG": [
     {
-      "date": "2026-07-10",
-      "struct": "alert",
-      "ma": "alert"
-    },
-    {
       "date": "2026-07-13",
       "struct": "alert",
       "ma": "alert"
@@ -6721,15 +6716,15 @@
       "date": "2026-10-07",
       "struct": "ok",
       "ma": "ok"
+    },
+    {
+      "date": "2026-10-08",
+      "struct": "ok",
+      "ma": "alert"
     }
   ],
   "2327.TW": [
     {
-      "date": "2026-07-10",
-      "struct": "alert",
-      "ma": "warn"
-    },
-    {
       "date": "2026-07-13",
       "struct": "alert",
       "ma": "warn"
@@ -7023,6 +7018,11 @@
       "date": "2026-10-07",
       "struct": "ok",
       "ma": "ok"
+    },
+    {
+      "date": "2026-10-08",
+      "struct": "ok",
+      "ma": "warn"
     }
   ]
 }
